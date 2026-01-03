@@ -28,13 +28,19 @@ export default function AiChat() {
     const chatEndRef = useRef(null);
     const router = useRouter();
 
-    const scrollToBottom = () => {
-        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const scrollToBottom = (behavior = 'smooth') => {
+        if (chatEndRef.current) {
+            // Use requestAnimationFrame to ensure the DOM has updated before scrolling
+            requestAnimationFrame(() => {
+                chatEndRef.current?.scrollIntoView({ behavior, block: 'end' });
+            });
+        }
     };
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+        // Use instant scroll for initial load, smooth thereafter
+        scrollToBottom(messages.length <= 1 ? 'auto' : 'smooth');
+    }, [messages, loading]);
 
     // Boot sequence effect
     useEffect(() => {
@@ -253,16 +259,21 @@ export default function AiChat() {
                         </div>
 
                         {/* Messages */}
-                        <div style={{
-                            flex: 1,
-                            overflowY: 'auto',
-                            padding: '1rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '1rem',
-                            minHeight: 0,
-                            background: 'rgba(10, 14, 20, 1)'
-                        }}>
+                        <div
+                            className="jarvis-messages-container"
+                            style={{
+                                flex: 1,
+                                overflowY: 'auto',
+                                padding: '1rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                                minHeight: 0,
+                                background: 'rgba(10, 14, 20, 1)',
+                                overscrollBehavior: 'contain',
+                                WebkitOverflowScrolling: 'touch'
+                            }}
+                        >
                             {messages.map((msg, i) => (
                                 <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
                                     <div style={{

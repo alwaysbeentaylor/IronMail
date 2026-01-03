@@ -795,7 +795,8 @@ p {
     width: calc(100vw - 2rem);
     right: 0;
     bottom: 85px;
-    height: 70vh;
+    height: 75dvh;
+    max-height: 500px;
   }
 
   header {
