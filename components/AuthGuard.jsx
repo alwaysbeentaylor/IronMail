@@ -51,11 +51,12 @@ export default function AuthGuard({ children }) {
     if (loading) {
         return (
             <div style={{
-                minHeight: '100vh',
-                background: 'var(--bg)',
+                height: '100dvh',
+                background: '#0a0e14',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                overflow: 'hidden'
             }}>
                 <div className="jarvis-boot-circle" style={{ width: '60px', height: '60px' }} />
             </div>
@@ -64,19 +65,25 @@ export default function AuthGuard({ children }) {
 
     if (!isAuthenticated) {
         return (
-            <div style={{
-                minHeight: '100vh',
-                background: 'linear-gradient(135deg, #0a0e14 0%, #1a2a3a 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2rem'
-            }}>
+            <div
+                className="login-container"
+                style={{
+                    minHeight: '100dvh',
+                    background: 'linear-gradient(135deg, #0a0e14 0%, #1a2a3a 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '1.5rem',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}
+            >
                 <div style={{
                     width: '100%',
                     maxWidth: '400px',
                     background: 'rgba(15, 25, 35, 0.9)',
                     backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
                     borderRadius: '20px',
                     border: '1px solid rgba(0, 212, 255, 0.3)',
                     padding: '3rem',
@@ -142,7 +149,6 @@ export default function AuthGuard({ children }) {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Access Code"
-                                autoFocus
                                 style={{
                                     width: '100%',
                                     padding: '1rem 3rem 1rem 3rem',
@@ -210,7 +216,7 @@ export default function AuthGuard({ children }) {
                         marginTop: '2rem',
                         letterSpacing: '0.05em'
                     }}>
-                        STARK INDUSTRIES SECURITY PROTOCOL
+                        SECURITY PROTOCOL
                     </p>
                 </div>
             </div>

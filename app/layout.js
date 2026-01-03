@@ -10,7 +10,7 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata = {
-    title: 'IronMail | Stark Command Center',
+    title: 'IronMail | Command Center',
     description: 'Advanced email management with J.A.R.V.I.S integration',
 };
 

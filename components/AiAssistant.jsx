@@ -33,7 +33,7 @@ export default function AiAssistant({ content, onUpdate, onUpdateSubject }) {
         <div className="card" style={{ padding: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
                 <Sparkles size={18} color="var(--primary)" />
-                <h3 style={{ margin: 0, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Stark Intelligence</h3>
+                <h3 style={{ margin: 0, fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Intelligence</h3>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>

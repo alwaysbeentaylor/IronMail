@@ -108,7 +108,7 @@ export default function Dashboard() {
                     <div style={{ background: 'var(--bg)', padding: '1.25rem', borderRadius: '8px', borderLeft: '4px solid var(--primary)' }}>
                         <TrendingUp size={20} color="var(--primary)" style={{ marginBottom: '0.5rem' }} />
                         <p style={{ color: 'var(--text)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-                            All systems operational. Connected to Resend API and Stark Systems.
+                            All systems operational. Connected to Resend API.
                         </p>
                     </div>
                 </div>
