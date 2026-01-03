@@ -14,7 +14,7 @@ export async function POST(req) {
         const defaultSender = (settings && !Array.isArray(settings)) ? settings.defaultSender : 'info@knowyourvip.com';
         const senderName = (settings && !Array.isArray(settings)) ? settings.senderName : 'S-MAILER';
 
-        const { data, error } = await resend.emails.send({
+        const emailOptions = {
             from: from || `${senderName} <${defaultSender}>`,
             to: typeof to === 'string' ? [to] : to,
             subject,
@@ -23,8 +23,14 @@ export async function POST(req) {
             reply_to: replyTo,
             cc,
             bcc,
-            scheduled_at: scheduledAt
-        });
+            scheduled_at: scheduledAt || undefined
+        };
+
+        if (scheduledAt) {
+            console.log(`[Resend] Scheduling email for: ${scheduledAt}`);
+        }
+
+        const { data, error } = await resend.emails.send(emailOptions);
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 400 });

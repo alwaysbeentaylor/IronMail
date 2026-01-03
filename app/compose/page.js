@@ -130,7 +130,7 @@ export default function ComposePage() {
                 body: JSON.stringify({
                     ...formData,
                     [mode]: formData.content,
-                    scheduledAt: isScheduled ? scheduledAt : null
+                    scheduledAt: isScheduled && scheduledAt ? new Date(scheduledAt).toISOString() : null
                 })
             });
             const data = await res.json();
@@ -222,6 +222,7 @@ export default function ComposePage() {
                                     placeholder="email@example.com"
                                     value={formData.to}
                                     onChange={(e) => setFormData({ ...formData, to: e.target.value })}
+                                    autoComplete="email"
                                 />
                             </div>
                         </div>
@@ -232,6 +233,7 @@ export default function ComposePage() {
                                 placeholder="The topic of your email"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                autoComplete="off"
                             />
                         </div>
 
@@ -277,7 +279,7 @@ export default function ComposePage() {
                                         className="input"
                                         value={scheduledAt}
                                         onChange={(e) => setScheduledAt(e.target.value)}
-                                        min={new Date(Date.now() + 65000).toISOString().slice(0, 16)} // Min 1 min from now
+                                        min={new Date(Date.now() + 70000).toLocaleString('sv-SE', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).replace(' ', 'T').slice(0, 16)} // Min ~1 min from now in local time
                                     />
                                 </div>
                             )}
