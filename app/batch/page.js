@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
     Layers,
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function BatchPage() {
+function BatchContent() {
     const searchParams = useSearchParams();
     const campaignId = searchParams.get('campaignId');
 
@@ -308,5 +308,13 @@ export default function BatchPage() {
                 </div>
             </aside>
         </div>
+    );
+}
+
+export default function BatchPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <BatchContent />
+        </Suspense>
     );
 }

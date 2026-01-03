@@ -2,6 +2,7 @@ import './globals.css';
 import { Rajdhani } from 'next/font/google';
 import Navigation from '@/components/Navigation';
 import AiChat from '@/components/AiChat';
+import AuthGuard from '@/components/AuthGuard';
 
 const rajdhani = Rajdhani({
     subsets: ['latin'],
@@ -9,21 +10,23 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata = {
-    title: 'S-MAILER | Stark Command Center',
-    description: 'Advanced email management with Jarvis integration',
+    title: 'IronMail | Stark Command Center',
+    description: 'Advanced email management with J.A.R.V.I.S integration',
 };
 
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body className={rajdhani.className}>
-                <div className="app-container">
-                    <Navigation />
-                    <main className="main-content">
-                        {children}
-                    </main>
-                    <AiChat />
-                </div>
+                <AuthGuard>
+                    <div className="app-container">
+                        <Navigation />
+                        <main className="main-content">
+                            {children}
+                        </main>
+                        <AiChat />
+                    </div>
+                </AuthGuard>
             </body>
         </html>
     );
