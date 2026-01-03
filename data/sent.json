@@ -1,0 +1,11 @@
+[
+  {
+    "id": "f74b4ea1-5f2f-402c-9663-d1907fc06b4e",
+    "createdAt": "2026-01-03T13:55:30.139Z",
+    "resendId": "3f7bd502-38b1-48f1-b962-bc5f8fd2d6ac",
+    "to": "develop.json@gmail.com",
+    "subject": "Terminal Test Run (Verified)",
+    "type": "text",
+    "status": "sent"
+  }
+]
