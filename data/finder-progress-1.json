@@ -204,7 +204,12 @@
     "Ramez Ramzy|The Ramzy Group",
     "Cathelijne van der Lande|Hotel Pistache",
     "Amsterdam, Noord-Holland, Nederland|Inntel Hotels Amsterdam Centre",
-    "Haarlem, Noord-Holland, Nederland|Blendin.com"
+    "Haarlem, Noord-Holland, Nederland|Blendin.com",
+    "Shannon Mc Laughlin|Janine",
+    "General Manager Swissôtel Amsterdam|Swissôtel Amsterdam",
+    "Karen Ballenden|LePub Amsterdam",
+    "Koen Hietbrink|@ACHotelKingston",
+    "General Manager @ACHotelKingston|AC Hotels"
   ],
   "results": {
     "Etienne van Ommen|Hotel Manager": {
@@ -3544,6 +3549,86 @@
       "hotelEmails": [],
       "allEmails": [],
       "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Shannon Mc Laughlin|Janine": {
+      "name": "Shannon Mc Laughlin",
+      "company": "Janine",
+      "headline": "General Manager | Janine",
+      "location": "Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "General Manager Swissôtel Amsterdam|Swissôtel Amsterdam": {
+      "name": "General Manager Swissôtel Amsterdam",
+      "company": "Swissôtel Amsterdam",
+      "headline": "Huidig: General Manager Swissôtel Amsterdam bij Swissôtel Amsterdam",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Karen Ballenden|LePub Amsterdam": {
+      "name": "Karen Ballenden",
+      "company": "LePub Amsterdam",
+      "headline": "General manager LePub Amsterdam",
+      "location": "Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Koen Hietbrink|@ACHotelKingston": {
+      "name": "Koen Hietbrink",
+      "company": "@ACHotelKingston",
+      "headline": "General Manager @ACHotelKingston",
+      "location": "Kingston, Jamaica",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "191114241"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "General Manager @ACHotelKingston|AC Hotels": {
+      "name": "General Manager @ACHotelKingston",
+      "company": "AC Hotels",
+      "headline": "Huidig: General Manager bij AC Hotels",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "191114241",
+        "180252170"
+      ],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,

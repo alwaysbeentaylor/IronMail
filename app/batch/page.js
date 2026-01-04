@@ -13,6 +13,7 @@ import {
     Bot,
     FolderOpen,
     Pause,
+    Play,
     History
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
