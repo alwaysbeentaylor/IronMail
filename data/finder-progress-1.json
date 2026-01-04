@@ -159,7 +159,12 @@
     "Liran Wizman|GCH Hotel Group and THE ENTOURAGE GROUP",
     "Patrick Brand|of Spinoza Suites #3 Tripadvisor listing Amsterdam",
     "Jaron Shaya|RJD Hotel",
-    "Joppe Sprinkhuizen|of restaurant SILLYFOX"
+    "Joppe Sprinkhuizen|of restaurant SILLYFOX",
+    "Erik Baumann|Spinoza Suites",
+    "Vincent Voorn|Hotel Eigenaar",
+    "Eric Van Marle|Marle Connects Executive Search & Interim",
+    "Kisa van den Berg|/ Creative Business Guide",
+    "Herma van Keulen|Slam Dunk 12 b.v."
   ],
   "results": {
     "Etienne van Ommen|Hotel Manager": {
@@ -2795,6 +2800,85 @@
       "hotelEmails": [],
       "allEmails": [],
       "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Erik Baumann|Spinoza Suites": {
+      "name": "Erik Baumann",
+      "company": "Spinoza Suites",
+      "headline": "Founder at Guest & Co, Owner at Spinoza Suites, Member of the Board of Advisors at Hotel Tech Group",
+      "location": "Amsterdam, Noord-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Vincent Voorn|Hotel Eigenaar": {
+      "name": "Vincent Voorn",
+      "company": "Hotel Eigenaar",
+      "headline": "Hotel Eigenaar, CEO RoomDelivery",
+      "location": "Amsterdam, Noord-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Eric Van Marle|Marle Connects Executive Search & Interim": {
+      "name": "Eric Van Marle",
+      "company": "Marle Connects Executive Search & Interim",
+      "headline": "Owner at Van Marle Connects Executive Search & Interim",
+      "location": "Hilversum, Noord-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "196229133"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Kisa van den Berg|/ Creative Business Guide": {
+      "name": "Kisa van den Berg",
+      "company": "/ Creative Business Guide",
+      "headline": "Owner / Creative Business Guide",
+      "location": "Amsterdam, Noord-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Herma van Keulen|Slam Dunk 12 b.v.": {
+      "name": "Herma van Keulen",
+      "company": "Slam Dunk 12 b.v.",
+      "headline": "Owner Slam Dunk 12 b.v.",
+      "location": "Amsterdam Area",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "181161225"
+      ],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,

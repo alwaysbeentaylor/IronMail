@@ -179,7 +179,12 @@
     "General Manager, The Ostendian|The Ostendian",
     "Bredene, Vlaanderen, België|The Ostendian",
     "Wim Van de Keere|BNXT League",
-    "Mozes Martens|en Hotel Villa Jazmin"
+    "Mozes Martens|en Hotel Villa Jazmin",
+    "Bob Smitz|Witte Molen bv",
+    "JP Misselwitz|Brugge on North",
+    "Bruno Vandelanotte|Operations",
+    "Jay Seghi|Point Brugge Cafe",
+    "Steven Vervaeke|& Owner at YINDI TRAVEL"
   ],
   "results": {
     "Dominika Dhondt|Napoleon Games Grand Casino Knokke": {
@@ -2973,6 +2978,89 @@
       "hotelEmails": [],
       "allEmails": [],
       "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Bob Smitz|Witte Molen bv": {
+      "name": "Bob Smitz",
+      "company": "Witte Molen bv",
+      "headline": "General Manager Witte Molen bv",
+      "location": "Brugge en omgeving",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "196207222"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "JP Misselwitz|Brugge on North": {
+      "name": "JP Misselwitz",
+      "company": "Brugge on North",
+      "headline": "General Manager at Brugge on North",
+      "location": "Pittsburgh en omgeving",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "170244103"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Bruno Vandelanotte|Operations": {
+      "name": "Bruno Vandelanotte",
+      "company": "Operations",
+      "headline": "General Manager at Vanmed (Vandelanotte consulting) Head Export sales at Roncadelle-Operations",
+      "location": "Brugge en omgeving",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "103251254"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Jay Seghi|Point Brugge Cafe": {
+      "name": "Jay Seghi",
+      "company": "Point Brugge Cafe",
+      "headline": "General Manager at Point Brugge Cafe",
+      "location": "Pittsburgh, Pennsylvania, Verenigde Staten",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Steven Vervaeke|& Owner at YINDI TRAVEL": {
+      "name": "Steven Vervaeke",
+      "company": "& Owner at YINDI TRAVEL",
+      "headline": "General Manager & Owner at YINDI TRAVEL",
+      "location": "Marke, Vlaanderen, België",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "197185149"
+      ],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,
