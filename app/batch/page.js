@@ -122,7 +122,7 @@ function BatchContent() {
     const recipients = getRecipients();
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '2rem' }}>
+        <div className="batch-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '2rem' }}>
             <div>
                 <header style={{ marginBottom: '2rem' }}>
                     <p style={{ color: 'var(--primary)', fontWeight: 600, marginBottom: '0.25rem' }}>Campaigns</p>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Lock, Eye, EyeOff, Shield } from 'lucide-react';
 
-const CORRECT_PASSWORD = 'Seekanieh23';
+const CORRECT_PASSWORD = 'Sikaede23';
 const AUTH_COOKIE = 'ironmail_auth';
 const COOKIE_DAYS = 30; // Remember for 30 days
 

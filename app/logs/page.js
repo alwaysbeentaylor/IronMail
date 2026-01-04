@@ -65,7 +65,7 @@ export default function LogsPage() {
                     <p style={{ color: 'var(--primary)', fontWeight: 600, marginBottom: '0.25rem' }}>System</p>
                     <h1>Activity Logs</h1>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     <select
                         className="input"
                         style={{ width: 'auto' }}

@@ -12,6 +12,10 @@ dist/
 # Environment
 .env
 .env.local
+
+# LinkedIn Harvester (sensitive)
+linkedin-cookies.json
+.chrome-*/
 .env.development.local
 .env.test.local
 .env.production.local

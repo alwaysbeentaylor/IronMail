@@ -38,7 +38,7 @@ export default function ContactsPage() {
                     <p style={{ color: 'var(--primary)', fontWeight: 600, marginBottom: '0.25rem' }}>Management</p>
                     <h1>Contacts (CRM)</h1>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     <div className="card" style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 0 }}>
                         <Search size={16} color="var(--text-muted)" />
                         <input

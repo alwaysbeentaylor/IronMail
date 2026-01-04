@@ -190,7 +190,7 @@ function CampaignImporter({ agents, onClose }) {
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
         }}>
-            <div className="card" style={{ width: '700px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+            <div className="card modal-card" style={{ width: '700px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <FileSpreadsheet size={24} color="var(--primary)" />
@@ -240,7 +240,7 @@ function CampaignImporter({ agents, onClose }) {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                 <div
                                     className="card"
                                     style={{

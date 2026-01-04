@@ -120,7 +120,7 @@ export default function InboxPage() {
                     <p style={{ color: 'var(--primary)', fontWeight: 600, marginBottom: '0.25rem' }}>Communications</p>
                     <h1>Inbound Emails</h1>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     <button
                         className="btn btn-outline"
                         onClick={fetchInbox}
@@ -173,7 +173,7 @@ export default function InboxPage() {
                     <p>Wanneer iemand een email stuurt naar je Resend adres, verschijnt deze hier.</p>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '2rem' }}>
+                <div className="inbox-layout" style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '2rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         {filteredEmails.length > 0 ? filteredEmails.map((email) => (
                             <div
