@@ -269,7 +269,12 @@
     "Evergem, Vlaanderen, België|Motomediateam",
     "Alessandra De Praetere|Nordic Collection",
     "Jonathan Schmidt|of Rooms",
-    "Rutger Huiberts, AIA|of MVRDV New York"
+    "Rutger Huiberts, AIA|of MVRDV New York",
+    "Robbert-Jan Van De Velde|Radio Veronica",
+    "Creative Director|Daniel Ost Group",
+    "Knokke, Vlaanderen, België|Daniel Ost Group",
+    "Business Development Director|Fovea IP",
+    "Pieter-Jan Cuvelier|@ Lighthouse"
   ],
   "results": {
     "Angela Böck|presso Marry me in Italy": {
@@ -4448,6 +4453,85 @@
       "company": "of MVRDV New York",
       "headline": "Architect - Director of MVRDV New York",
       "location": "New York, New York, Verenigde Staten",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Robbert-Jan Van De Velde|Radio Veronica": {
+      "name": "Robbert-Jan Van De Velde",
+      "company": "Radio Veronica",
+      "headline": "Station Director Radio Veronica | Sublime",
+      "location": "Nederland",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Creative Director|Daniel Ost Group": {
+      "name": "Creative Director",
+      "company": "Daniel Ost Group",
+      "headline": "Huidig: Creative Director bij Daniel Ost Group",
+      "location": "Onbekend",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "201172175"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Knokke, Vlaanderen, België|Daniel Ost Group": {
+      "name": "Knokke, Vlaanderen, België",
+      "company": "Daniel Ost Group",
+      "headline": "Huidig: Creative Director bij Daniel Ost Group",
+      "location": "Onbekend",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Business Development Director|Fovea IP": {
+      "name": "Business Development Director",
+      "company": "Fovea IP",
+      "headline": "Huidig: Business Development Director bij Fovea IP",
+      "location": "Onbekend",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "115186189"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Pieter-Jan Cuvelier|@ Lighthouse": {
+      "name": "Pieter-Jan Cuvelier",
+      "company": "@ Lighthouse",
+      "headline": "Procurement Director @ Lighthouse | Building Procurement from Scratch",
+      "location": "Gent, Vlaanderen, België",
       "priority": "P2",
       "personalEmails": [],
       "hotelEmails": [],

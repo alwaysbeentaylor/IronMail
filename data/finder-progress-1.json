@@ -249,7 +249,12 @@
     "Walter Koehler|bei DSM Rotterdam",
     "Bart Van De Brug|Lore Group",
     "Marco Rossen|Rotterdam Air & Sea Freight BV",
-    "Anton van Dam|Walsum"
+    "Anton van Dam|Walsum",
+    "Arjan van Vuuren|Harding Marine Services (Rotterdam) B.V.",
+    "Krisztina Popa|KFC Rotterdam",
+    "General Manager The Manor Amsterdam|Leonardo Hotels Benelux",
+    "Amersfoort, Utrecht, Nederland|Leonardo Hotels Benelux",
+    "Kevin Prinsen|Staybridge Suites The Hague"
   ],
   "results": {
     "Etienne van Ommen|Hotel Manager": {
@@ -4297,6 +4302,85 @@
       "hotelEmails": [],
       "allEmails": [],
       "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Arjan van Vuuren|Harding Marine Services (Rotterdam) B.V.": {
+      "name": "Arjan van Vuuren",
+      "company": "Harding Marine Services (Rotterdam) B.V.",
+      "headline": "General Manager  bij Harding Marine Services (Rotterdam) B.V.",
+      "location": "Rotterdam, Zuid-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Krisztina Popa|KFC Rotterdam": {
+      "name": "Krisztina Popa",
+      "company": "KFC Rotterdam",
+      "headline": "Former Restaurant General Manager KFC Rotterdam",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "General Manager The Manor Amsterdam|Leonardo Hotels Benelux": {
+      "name": "General Manager The Manor Amsterdam",
+      "company": "Leonardo Hotels Benelux",
+      "headline": "Huidig: General Manager The Manor Amsterdam bij Leonardo Hotels Benelux",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "105184113"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Amersfoort, Utrecht, Nederland|Leonardo Hotels Benelux": {
+      "name": "Amersfoort, Utrecht, Nederland",
+      "company": "Leonardo Hotels Benelux",
+      "headline": "Huidig: General Manager The Manor Amsterdam bij Leonardo Hotels Benelux",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Kevin Prinsen|Staybridge Suites The Hague": {
+      "name": "Kevin Prinsen",
+      "company": "Staybridge Suites The Hague",
+      "headline": "General Manager at Staybridge Suites The Hague - Parliament",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "104137107"
+      ],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,

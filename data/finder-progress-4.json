@@ -269,7 +269,12 @@
     "Rahil Shaikh|Hotel Development",
     "Félix Mouriau de Meulenacker|The Mix Brussels",
     "Belœil, Wallonië, België|Mix Brussels",
-    "Mich Hermans|Banqup Group"
+    "Mich Hermans|Banqup Group",
+    "Sales Account Manager | Banqup Group|Banqup Group",
+    "Merksplas, Vlaanderen, België|Banqup Group",
+    "Valérie De Ketelaere|hub.brussels",
+    "Michiel Baken|Hotel Co 51",
+    "Marianela Téllez Caballero|CVO Brussels."
   ],
   "results": {
     "Xabier Nambo|@Nhow Rotterdam": {
@@ -4431,6 +4436,85 @@
       "company": "Banqup Group",
       "headline": "Sales Account Manager | Banqup Group",
       "location": "Merksplas, Vlaanderen, België",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Sales Account Manager | Banqup Group|Banqup Group": {
+      "name": "Sales Account Manager | Banqup Group",
+      "company": "Banqup Group",
+      "headline": "Huidig: Sales Account Manager bij Banqup Group",
+      "location": "Onbekend",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Merksplas, Vlaanderen, België|Banqup Group": {
+      "name": "Merksplas, Vlaanderen, België",
+      "company": "Banqup Group",
+      "headline": "Huidig: Sales Account Manager bij Banqup Group",
+      "location": "Onbekend",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "105235136"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Valérie De Ketelaere|hub.brussels": {
+      "name": "Valérie De Ketelaere",
+      "company": "hub.brussels",
+      "headline": "Huidig: Member of the Advisory Board | Hospitality.brussels bij hub.brussels",
+      "location": "Onbekend",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Michiel Baken|Hotel Co 51": {
+      "name": "Michiel Baken",
+      "company": "Hotel Co 51",
+      "headline": "People & Culture Manager at Hotel Co 51",
+      "location": "Amsterdam, Noord-Holland, Nederland",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "113162236"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Marianela Téllez Caballero|CVO Brussels.": {
+      "name": "Marianela Téllez Caballero",
+      "company": "CVO Brussels.",
+      "headline": "Tourism and Hospitality Professional with 8 years of experience in customer service, Food and Beverage, Front of House operation. I have completed my training as Baker and Pastry Chef at CVO Brussels.",
+      "location": "Halle, Vlaanderen, België",
       "priority": "P3",
       "personalEmails": [],
       "hotelEmails": [],
