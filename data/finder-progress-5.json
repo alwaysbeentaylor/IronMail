@@ -234,7 +234,12 @@
     "Lime Paris - Operations Manager|Lime",
     "Claire Perrier|opérations Fendi Paris",
     "Neri Cavini Golubovic|@Uber",
-    "Raphael LAVAL|Paris chez Phillips Auctioneers"
+    "Raphael LAVAL|Paris chez Phillips Auctioneers",
+    "Elie Mattar|@ Battri",
+    "Rani U|PARIS PERFUMES IND LLC",
+    "Stéphanne Lambin|TPI Transport Paris International",
+    "Jais Emmanuelle|des Opérations Hôtellerie paris chez ELIOR SERVICES PROPRETE ET SANTE",
+    "Caroline Mouminoux - Gauci|Paris in Sofyne"
   ],
   "results": {
     "Luxemburg, Wallonië, België|hotel Corbillon": {
@@ -3860,6 +3865,87 @@
       "hotelEmails": [],
       "allEmails": [],
       "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Elie Mattar|@ Battri": {
+      "name": "Elie Mattar",
+      "company": "@ Battri",
+      "headline": "Business Operations Manager @ Battri | HEC Paris MBA",
+      "location": "Parijs en omgeving",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Rani U|PARIS PERFUMES IND LLC": {
+      "name": "Rani U",
+      "company": "PARIS PERFUMES IND LLC",
+      "headline": "Operations Manager at PARIS PERFUMES IND LLC",
+      "location": "Onbekend",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Stéphanne Lambin|TPI Transport Paris International": {
+      "name": "Stéphanne Lambin",
+      "company": "TPI Transport Paris International",
+      "headline": "Operation manager TPI Transport Paris International",
+      "location": "Nanterre, Île-de-France, Frankrijk",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "188132222"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Jais Emmanuelle|des Opérations Hôtellerie paris chez ELIOR SERVICES PROPRETE ET SANTE": {
+      "name": "Jais Emmanuelle",
+      "company": "des Opérations Hôtellerie paris chez ELIOR SERVICES PROPRETE ET SANTE",
+      "headline": "Manager des Opérations Hôtellerie paris chez ELIOR SERVICES PROPRETE ET SANTE",
+      "location": "Parijs, Île-de-France, Frankrijk",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "185139139"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Caroline Mouminoux - Gauci|Paris in Sofyne": {
+      "name": "Caroline Mouminoux - Gauci",
+      "company": "Paris in Sofyne",
+      "headline": "Operations Manager Paris in Sofyne",
+      "location": "Parijs en omgeving",
+      "priority": "P3",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "223187215"
+      ],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,

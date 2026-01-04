@@ -264,7 +264,12 @@
     "Karin Duivenvoorden|bringing people together for meaningful results",
     "Hans Deuze|Design & Production at Puy du Fou Ned. BV",
     "Pieter-Jan Massoels|of Operations Northern Europe @ easyHotel",
-    "Arnaud Thysen|General chez European Business Summits"
+    "Arnaud Thysen|General chez European Business Summits",
+    "Sielke Zwertvaegher|of Sales at Yalo Urban Boutique Hotel Gent",
+    "Evergem, Vlaanderen, België|Motomediateam",
+    "Alessandra De Praetere|Nordic Collection",
+    "Jonathan Schmidt|of Rooms",
+    "Rutger Huiberts, AIA|of MVRDV New York"
   ],
   "results": {
     "Angela Böck|presso Marry me in Italy": {
@@ -4369,6 +4374,85 @@
         "190131128",
         "103147163"
       ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Sielke Zwertvaegher|of Sales at Yalo Urban Boutique Hotel Gent": {
+      "name": "Sielke Zwertvaegher",
+      "company": "of Sales at Yalo Urban Boutique Hotel Gent",
+      "headline": "Director of Sales at Yalo Urban Boutique Hotel Gent",
+      "location": "Gent, Vlaanderen, België",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Evergem, Vlaanderen, België|Motomediateam": {
+      "name": "Evergem, Vlaanderen, België",
+      "company": "Motomediateam",
+      "headline": "Huidig: Freelance cycling tv director bij Motomediateam",
+      "location": "James, u zou iets kunnen hebben aan onbeperkt zoeken",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "189142240"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Alessandra De Praetere|Nordic Collection": {
+      "name": "Alessandra De Praetere",
+      "company": "Nordic Collection",
+      "headline": "Marketing Director at Nordic Collection",
+      "location": "Gent, Vlaanderen, België",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "194127108"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Jonathan Schmidt|of Rooms": {
+      "name": "Jonathan Schmidt",
+      "company": "of Rooms",
+      "headline": "Director of Rooms - Capella Bangkok",
+      "location": "Bangkok en omgeving",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Rutger Huiberts, AIA|of MVRDV New York": {
+      "name": "Rutger Huiberts, AIA",
+      "company": "of MVRDV New York",
+      "headline": "Architect - Director of MVRDV New York",
+      "location": "New York, New York, Verenigde Staten",
+      "priority": "P2",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
       "addresses": [],
       "domain": null,
       "primaryEmail": null,

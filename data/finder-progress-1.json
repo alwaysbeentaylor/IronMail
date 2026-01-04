@@ -244,7 +244,12 @@
     "Erik Romsom|SCC Bevrachting BV",
     "Rhoon, Zuid-Holland, Nederland|SCC ROTTERDAM",
     "Raymond van Lammeren|Rotterdam Marine Works",
-    "Maarten Peelen|Zero Latency VR Amsterdam"
+    "Maarten Peelen|Zero Latency VR Amsterdam",
+    "Angeline Puno|Five Guys Rotterdam",
+    "Walter Koehler|bei DSM Rotterdam",
+    "Bart Van De Brug|Lore Group",
+    "Marco Rossen|Rotterdam Air & Sea Freight BV",
+    "Anton van Dam|Walsum"
   ],
   "results": {
     "Etienne van Ommen|Hotel Manager": {
@@ -4208,6 +4213,85 @@
       "company": "Zero Latency VR Amsterdam",
       "headline": "General Manager at Zero Latency VR Amsterdam, Rotterdam & Utrecht",
       "location": "Huidig: General Manager bij Zero Latency VR Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Angeline Puno|Five Guys Rotterdam": {
+      "name": "Angeline Puno",
+      "company": "Five Guys Rotterdam",
+      "headline": "General Manager at Five Guys Rotterdam",
+      "location": "Rotterdam, Zuid-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "185206124"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Walter Koehler|bei DSM Rotterdam": {
+      "name": "Walter Koehler",
+      "company": "bei DSM Rotterdam",
+      "headline": "General Manager bei DSM Rotterdam",
+      "location": "Den Haag, Zuid-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Bart Van De Brug|Lore Group": {
+      "name": "Bart Van De Brug",
+      "company": "Lore Group",
+      "headline": "Regional General Manager at Lore Group",
+      "location": "Amsterdam, Noord-Holland, Nederland",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [
+        "153243115"
+      ],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Marco Rossen|Rotterdam Air & Sea Freight BV": {
+      "name": "Marco Rossen",
+      "company": "Rotterdam Air & Sea Freight BV",
+      "headline": "General Manager bij Rotterdam Air & Sea Freight BV",
+      "location": "Onbekend",
+      "priority": "P1",
+      "personalEmails": [],
+      "hotelEmails": [],
+      "allEmails": [],
+      "phones": [],
+      "addresses": [],
+      "domain": null,
+      "primaryEmail": null,
+      "confidence": "NONE"
+    },
+    "Anton van Dam|Walsum": {
+      "name": "Anton van Dam",
+      "company": "Walsum",
+      "headline": "Owner of Hotel van Walsum, Rotterdam",
+      "location": "Rotterdam, Zuid-Holland, Nederland",
       "priority": "P1",
       "personalEmails": [],
       "hotelEmails": [],
