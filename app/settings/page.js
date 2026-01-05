@@ -32,10 +32,11 @@ export default function SettingsPage() {
             .then(data => {
                 setSettings(Array.isArray(data) ? {
                     defaultSender: "info@knowyourvip.com",
+                    senderName: "KnowYourVIP",
                     domain: "knowyourvip.com",
                     aiModel: "gpt-4o-mini",
                     signature: ""
-                } : data);
+                } : { senderName: "KnowYourVIP", ...data });
                 setLoading(false);
             });
     }, []);
