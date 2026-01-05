@@ -12,6 +12,17 @@ const rajdhani = Rajdhani({
 export const metadata = {
     title: 'IronMail | Command Center',
     description: 'Advanced email management with J.A.R.V.I.S integration',
+    manifest: '/manifest.json',
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'black-translucent',
+        title: 'IronMail',
+    },
+    icons: {
+        icon: '/jarvis-icon.png',
+        apple: '/jarvis-icon.png',
+    },
+    themeColor: '#f59e0b',
 };
 
 export default function RootLayout({ children }) {
