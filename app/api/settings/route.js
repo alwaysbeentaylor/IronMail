@@ -11,11 +11,17 @@ export async function GET() {
     if (Array.isArray(settings) && settings.length === 0) {
         return NextResponse.json({
             defaultSender: "info@knowyourvip.com",
+            senderName: "KnowYourVIP",
             domain: "knowyourvip.com",
             aiModel: "gpt-4o-mini"
         });
     }
-    return NextResponse.json(settings);
+    // Ensure senderName has a default if missing from stored settings
+    const response = {
+        senderName: "KnowYourVIP",
+        ...settings
+    };
+    return NextResponse.json(response);
 }
 
 export async function POST(req) {

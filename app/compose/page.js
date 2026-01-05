@@ -65,7 +65,13 @@ export default function ComposePage() {
             .then(res => res.json())
             .then(data => {
                 if (data && !Array.isArray(data)) {
-                    setFormData(prev => ({ ...prev, from: data.defaultSender || '' }));
+                    const senderName = data.senderName || '';
+                    const defaultSender = data.defaultSender || '';
+                    // Format as "SenderName <email>" if senderName exists
+                    const fromValue = senderName && defaultSender
+                        ? `${senderName} <${defaultSender}>`
+                        : defaultSender;
+                    setFormData(prev => ({ ...prev, from: fromValue }));
                 }
             });
         fetchDrafts();
