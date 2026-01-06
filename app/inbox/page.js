@@ -322,11 +322,15 @@ Geef alleen de tekst van het antwoord, geen aanhef of afsluiting die ik zelf al 
                                     </div>
                                 </div>
 
-                                <div style={{ flex: 1, marginBottom: '2rem' }}>
+                                <div className="email-content-area" style={{ marginBottom: '2rem', minHeight: '200px' }}>
                                     {selectedEmail.html ? (
-                                        <iframe srcDoc={selectedEmail.html} title="Email Body" style={{ width: '100%', border: 'none', height: '100%', minHeight: '300px' }} />
+                                        <iframe
+                                            srcDoc={`<style>body{background:#0a0e14;color:#f0f8ff;font-family:system-ui,sans-serif;padding:1rem;margin:0;line-height:1.6;}a{color:#00d4ff;}</style>${selectedEmail.html}`}
+                                            title="Email Body"
+                                            style={{ width: '100%', border: 'none', minHeight: '300px', height: 'auto', background: '#0a0e14', borderRadius: '8px' }}
+                                        />
                                     ) : (
-                                        <p style={{ whiteSpace: 'pre-wrap', color: 'var(--text)' }}>{selectedEmail.text}</p>
+                                        <p style={{ whiteSpace: 'pre-wrap', color: '#f0f8ff', lineHeight: '1.6', fontSize: '0.95rem' }}>{selectedEmail.text}</p>
                                     )}
                                 </div>
 
