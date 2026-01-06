@@ -21,7 +21,7 @@ export default function AiChat() {
     const [bootStep, setBootStep] = useState(0);
     const [bootComplete, setBootComplete] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', text: 'Hey! Ik ben Jarvis, je persoonlijke assistent. Stel me een vraag of geef een commando!' }
+        { role: 'assistant', text: 'Hey! 👋 Ik ben J.A.R.V.I.S - je persoonlijke AI assistent.\n\nIk kan je helpen met:\n• 📧 Emails schrijven en versturen\n• 👥 Contacten beheren\n• 💬 Algemene vragen beantwoorden\n• 🤔 Advies en suggesties geven\n\nWaar kan ik je mee helpen vandaag? 😊' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -280,7 +280,7 @@ export default function AiChat() {
                                         padding: '0.85rem 1.1rem',
                                         borderRadius: '12px',
                                         fontSize: '0.9rem',
-                                        lineHeight: '1.5',
+                                        lineHeight: '1.6',
                                         background: msg.role === 'user'
                                             ? 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)'
                                             : 'rgba(20, 35, 50, 0.8)',
@@ -290,7 +290,9 @@ export default function AiChat() {
                                         borderBottomRightRadius: msg.role === 'user' ? '2px' : '12px',
                                         boxShadow: msg.role === 'user'
                                             ? '0 4px 15px rgba(0, 212, 255, 0.3)'
-                                            : '0 2px 10px rgba(0, 0, 0, 0.2)'
+                                            : '0 2px 10px rgba(0, 0, 0, 0.2)',
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-word'
                                     }}>
                                         {msg.text}
 
