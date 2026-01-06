@@ -141,41 +141,71 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
     return (
         <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 1000 }}>
-            {/* Arc Reactor Toggle Button */}
-            <button
-                onClick={handleOpen}
-                style={{
-                    width: '70px',
-                    height: '70px',
+            {/* Arc Reactor Toggle Button - Living/Pulsing */}
+            <div style={{ position: 'relative', width: '70px', height: '70px' }}>
+                {/* Outer pulsing ring */}
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '90px',
+                    height: '90px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle at 30% 30%, #1a2a3a, #0a0e14)',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 0 30px rgba(0, 212, 255, 0.5), 0 0 60px rgba(0, 212, 255, 0.3), inset 0 0 20px rgba(0, 212, 255, 0.1)',
-                    border: '2px solid rgba(0, 212, 255, 0.5)',
-                    cursor: 'pointer',
-                    animation: 'arc-reactor 2s ease-in-out infinite',
-                    overflow: 'hidden',
-                    padding: 0
-                }}
-            >
-                {isOpen ? (
-                    <X size={28} color="#00d4ff" />
-                ) : (
-                    <img
-                        src="/jarvis-icon.png"
-                        alt="Jarvis"
-                        width={50}
-                        height={50}
-                        className="jarvis-eye"
-                        style={{ borderRadius: '50%', objectFit: 'cover' }}
-                    />
-                )}
-            </button>
+                    border: '2px solid rgba(0, 212, 255, 0.3)',
+                    animation: 'pulse 2s ease-in-out infinite',
+                    pointerEvents: 'none'
+                }} />
 
-            {/* JARVIS FULLSCREEN INTERFACE - THE MAIN CHARACTER */}
+                {/* Main Arc Reactor button */}
+                <button
+                    onClick={handleOpen}
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '70px',
+                        height: '70px',
+                        borderRadius: '50%',
+                        background: 'radial-gradient(circle at 30% 30%, #1a2a3a, #0a0e14)',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 0 30px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(0, 212, 255, 0.2)',
+                        border: '2px solid rgba(0, 212, 255, 0.6)',
+                        cursor: 'pointer',
+                        animation: 'pulse 2s ease-in-out infinite 0.5s',
+                        overflow: 'hidden',
+                        padding: 0,
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                        e.currentTarget.style.boxShadow = '0 0 50px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.6), inset 0 0 30px rgba(0, 212, 255, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)';
+                        e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(0, 212, 255, 0.2)';
+                    }}
+                >
+                    {isOpen ? (
+                        <X size={28} color="#00d4ff" />
+                    ) : (
+                        <img
+                            src="/jarvis-icon.png"
+                            alt="Jarvis"
+                            width={50}
+                            height={50}
+                            className="jarvis-eye"
+                            style={{ borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                    )}
+                </button>
+            </div>
+
+            {/* JARVIS FULLSCREEN INTERFACE - THE MAIN CHARACTER - LIVING */}
             {isOpen && (
                 <div style={{
                     position: 'fixed',
@@ -187,8 +217,22 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                     zIndex: 9999,
                     display: 'flex',
                     flexDirection: 'column',
-                    animation: 'jarvisFullscreenIn 0.4s ease-out'
+                    animation: 'jarvisFullscreenIn 0.4s ease-out',
+                    boxShadow: 'inset 0 0 100px rgba(0, 212, 255, 0.1)'
                 }}>
+                    {/* Pulsing border glow - makes it feel alive */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        border: '1px solid rgba(0, 212, 255, 0.3)',
+                        pointerEvents: 'none',
+                        animation: 'pulse 3s ease-in-out infinite',
+                        boxShadow: '0 0 40px rgba(0, 212, 255, 0.2), inset 0 0 40px rgba(0, 212, 255, 0.1)'
+                    }} />
+
                     {/* Animated Background Grid */}
                     <div style={{
                         position: 'absolute',
@@ -202,7 +246,8 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                         `,
                         backgroundSize: '50px 50px',
                         opacity: 0.3,
-                        pointerEvents: 'none'
+                        pointerEvents: 'none',
+                        animation: 'pulse 4s ease-in-out infinite'
                     }} />
 
                     {/* Glowing particles */}
@@ -293,7 +338,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                         transition: 'opacity 0.5s ease',
                         zIndex: 1
                     }}>
-                        {/* Header Bar - Compact */}
+                        {/* Header Bar - Compact with Living Pulse */}
                         <div style={{
                             padding: '0.75rem 1.25rem',
                             background: 'rgba(10, 14, 20, 0.8)',
@@ -302,7 +347,9 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.75rem',
-                            zIndex: 10
+                            zIndex: 10,
+                            boxShadow: '0 4px 20px rgba(0, 212, 255, 0.15)',
+                            animation: 'pulse 3s ease-in-out infinite 0.5s'
                         }}>
                             {/* Close Button */}
                             <button
@@ -343,7 +390,9 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     overflow: 'hidden',
-                                    flexShrink: 0
+                                    flexShrink: 0,
+                                    boxShadow: '0 0 15px rgba(0, 212, 255, 0.4)',
+                                    animation: 'pulse 2s ease-in-out infinite'
                                 }}>
                                     <img
                                         src="/jarvis-icon.png"
@@ -360,8 +409,23 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 8px #00ff88', animation: 'pulse 2s ease-in-out infinite' }} />
-                                <span style={{ fontSize: '0.7rem', color: '#00ff88', textTransform: 'uppercase', letterSpacing: '0.03em', fontWeight: 600, whiteSpace: 'nowrap' }}>Online</span>
+                                <div style={{
+                                    width: '8px',
+                                    height: '8px',
+                                    borderRadius: '50%',
+                                    background: '#00ff88',
+                                    boxShadow: '0 0 12px #00ff88, 0 0 24px rgba(0, 255, 136, 0.5)',
+                                    animation: 'pulse 1.5s ease-in-out infinite'
+                                }} />
+                                <span style={{
+                                    fontSize: '0.7rem',
+                                    color: '#00ff88',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.03em',
+                                    fontWeight: 600,
+                                    whiteSpace: 'nowrap',
+                                    textShadow: '0 0 10px rgba(0, 255, 136, 0.5)'
+                                }}>Online</span>
                             </div>
                         </div>
 
