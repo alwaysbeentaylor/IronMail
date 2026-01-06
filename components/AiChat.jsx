@@ -162,39 +162,106 @@ export default function AiChat() {
                 )}
             </button>
 
-            {/* JARVIS Brain Control Center */}
+            {/* JARVIS FULLSCREEN INTERFACE - THE MAIN CHARACTER */}
             {isOpen && (
-                <div className="jarvis-hud-container">
-                    {/* Outer Rotating Ring */}
-                    <div className="jarvis-ring jarvis-ring-outer" />
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(135deg, #0a0e14 0%, #1a1f2e 50%, #0a0e14 100%)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    animation: 'jarvisFullscreenIn 0.4s ease-out'
+                }}>
+                    {/* Animated Background Grid */}
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: `
+                            linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '50px 50px',
+                        opacity: 0.3,
+                        pointerEvents: 'none'
+                    }} />
 
-                    {/* Middle Pulsing Ring */}
-                    <div className="jarvis-ring jarvis-ring-middle" />
-
-                    {/* Inner Core Ring */}
-                    <div className="jarvis-ring jarvis-ring-inner" />
-
-                    {/* Scanning Grid Lines */}
-                    <div className="jarvis-grid" />
-
-                    {/* Corner Brackets */}
-                    <div className="jarvis-bracket jarvis-bracket-tl" />
-                    <div className="jarvis-bracket jarvis-bracket-tr" />
-                    <div className="jarvis-bracket jarvis-bracket-bl" />
-                    <div className="jarvis-bracket jarvis-bracket-br" />
+                    {/* Glowing particles */}
+                    <div className="jarvis-particles-fullscreen" />
 
                     {/* Boot Sequence Overlay */}
                     {isBooting && (
-                        <div className="jarvis-boot-overlay">
-                            <div className="jarvis-boot-core">
-                                <div className="jarvis-boot-circle" />
-                                <div className="jarvis-boot-circle jarvis-boot-circle-2" />
-                                <div className="jarvis-boot-circle jarvis-boot-circle-3" />
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: 'rgba(0, 0, 0, 0.95)',
+                            zIndex: 10000,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '2rem'
+                        }}>
+                            <div style={{ position: 'relative', width: '200px', height: '200px' }}>
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '160px',
+                                    height: '160px',
+                                    borderRadius: '50%',
+                                    border: '3px solid rgba(0, 212, 255, 0.3)',
+                                    animation: 'pulse 2s ease-in-out infinite'
+                                }} />
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '120px',
+                                    height: '120px',
+                                    borderRadius: '50%',
+                                    border: '2px solid rgba(0, 212, 255, 0.5)',
+                                    animation: 'pulse 2s ease-in-out infinite 0.5s'
+                                }} />
+                                <img
+                                    src="/jarvis-icon.png"
+                                    alt="Jarvis"
+                                    width={80}
+                                    height={80}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        borderRadius: '50%',
+                                        objectFit: 'cover',
+                                        boxShadow: '0 0 40px rgba(0, 212, 255, 0.6)'
+                                    }}
+                                />
                             </div>
-                            <div className="jarvis-boot-text">
+                            <div style={{ textAlign: 'center', fontFamily: 'monospace' }}>
                                 {BOOT_SEQUENCE.slice(0, bootStep).map((step, i) => (
-                                    <div key={i} className="jarvis-boot-line" style={{ animationDelay: `${i * 0.1}s` }}>
-                                        <span className="jarvis-boot-indicator">▸</span>
+                                    <div key={i} style={{
+                                        fontSize: '0.9rem',
+                                        color: '#00d4ff',
+                                        marginBottom: '0.5rem',
+                                        opacity: 0,
+                                        animation: 'fadeIn 0.3s ease-out forwards',
+                                        animationDelay: `${i * 0.1}s`,
+                                        letterSpacing: '0.05em'
+                                    }}>
+                                        <span style={{ color: '#00ff88', marginRight: '0.5rem' }}>▸</span>
                                         {step.text}
                                     </div>
                                 ))}
@@ -202,97 +269,133 @@ export default function AiChat() {
                         </div>
                     )}
 
-                    {/* Main Chat Window */}
-                    <div
-                        className="jarvis-chat-window"
-                        style={{
-                            position: 'relative',
-                            width: '100%',
-                            height: '100%',
-                            background: 'rgba(10, 14, 20, 0.95)',
-                            backdropFilter: 'blur(20px)',
-                            WebkitBackdropFilter: 'blur(20px)',
-                            borderRadius: '16px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            overflow: 'hidden',
-                            opacity: bootComplete ? 1 : 0,
-                            transition: 'opacity 0.5s ease'
-                        }}
-                    >
-                        {/* Header */}
+                    {/* Main Fullscreen Chat Container */}
+                    <div style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        opacity: bootComplete ? 1 : 0,
+                        transition: 'opacity 0.5s ease',
+                        zIndex: 1
+                    }}>
+                        {/* Header Bar */}
                         <div style={{
-                            padding: '1.25rem',
-                            background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.1) 100%)',
+                            padding: '1rem 2rem',
+                            background: 'rgba(10, 14, 20, 0.8)',
+                            backdropFilter: 'blur(20px)',
                             borderBottom: '1px solid rgba(0, 212, 255, 0.2)',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '1rem'
+                            gap: '1rem',
+                            zIndex: 10
                         }}>
-                            <div style={{
-                                width: '45px',
-                                height: '45px',
-                                borderRadius: '12px',
-                                background: 'radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.3), transparent)',
-                                border: '1px solid rgba(0, 212, 255, 0.4)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                overflow: 'hidden'
-                            }}>
-                                <img
-                                    src="/jarvis-icon.png"
-                                    alt="Jarvis"
-                                    width={35}
-                                    height={35}
-                                    style={{ borderRadius: '8px', objectFit: 'cover' }}
-                                />
+                            {/* Close Button */}
+                            <button
+                                onClick={handleOpen}
+                                style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: 'rgba(0, 212, 255, 0.1)',
+                                    border: '1px solid rgba(0, 212, 255, 0.3)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
+                                    e.currentTarget.style.transform = 'scale(1.1)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
+                                    e.currentTarget.style.transform = 'scale(1)';
+                                }}
+                            >
+                                <X size={20} color="#00d4ff" />
+                            </button>
+
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <div style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '12px',
+                                    background: 'radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.3), transparent)',
+                                    border: '1px solid rgba(0, 212, 255, 0.4)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden'
+                                }}>
+                                    <img
+                                        src="/jarvis-icon.png"
+                                        alt="Jarvis"
+                                        width={40}
+                                        height={40}
+                                        style={{ borderRadius: '8px', objectFit: 'cover' }}
+                                    />
+                                </div>
+                                <div>
+                                    <h4 style={{ margin: 0, fontSize: '1.3rem', color: '#00d4ff', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>J.A.R.V.I.S</h4>
+                                    <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(122, 162, 196, 0.9)' }}>Just A Rather Very Intelligent System</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#00d4ff', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>J.A.R.V.I.S</h4>
-                                <p style={{ margin: 0, fontSize: '0.75rem', color: 'rgba(122, 162, 196, 0.9)' }}>Neural Command Interface</p>
-                            </div>
-                            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 10px #00ff88' }} />
-                                <span style={{ fontSize: '0.7rem', color: '#00ff88', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Online</span>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 10px #00ff88', animation: 'pulse 2s ease-in-out infinite' }} />
+                                <span style={{ fontSize: '0.8rem', color: '#00ff88', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Online & Ready</span>
                             </div>
                         </div>
 
-                        {/* Messages */}
+                        {/* Messages - ChatGPT Style Center Layout */}
                         <div
                             className="jarvis-messages-container"
                             style={{
                                 flex: 1,
                                 overflowY: 'auto',
-                                padding: '1rem',
+                                overflowX: 'hidden',
                                 display: 'flex',
-                                flexDirection: 'column',
-                                gap: '1rem',
+                                justifyContent: 'center',
                                 minHeight: 0,
-                                background: 'rgba(10, 14, 20, 1)',
                                 overscrollBehavior: 'contain',
-                                WebkitOverflowScrolling: 'touch'
+                                WebkitOverflowScrolling: 'touch',
+                                padding: '2rem 1rem'
                             }}
                         >
+                            <div style={{
+                                width: '100%',
+                                maxWidth: '900px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1.5rem'
+                            }}>
                             {messages.map((msg, i) => (
-                                <div key={i} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+                                <div key={i} style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                                    animation: 'messageSlideIn 0.3s ease-out'
+                                }}>
                                     <div style={{
-                                        padding: '0.85rem 1.1rem',
-                                        borderRadius: '12px',
-                                        fontSize: '0.9rem',
-                                        lineHeight: '1.6',
+                                        maxWidth: '75%',
+                                        padding: '1.2rem 1.5rem',
+                                        borderRadius: '16px',
+                                        fontSize: '1rem',
+                                        lineHeight: '1.7',
                                         background: msg.role === 'user'
                                             ? 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)'
-                                            : 'rgba(20, 35, 50, 0.8)',
+                                            : 'rgba(20, 35, 50, 0.6)',
                                         color: msg.role === 'user' ? '#0a0e14' : '#f0f8ff',
                                         border: msg.role === 'user' ? 'none' : '1px solid rgba(0, 212, 255, 0.2)',
-                                        borderBottomLeftRadius: msg.role === 'assistant' ? '2px' : '12px',
-                                        borderBottomRightRadius: msg.role === 'user' ? '2px' : '12px',
                                         boxShadow: msg.role === 'user'
-                                            ? '0 4px 15px rgba(0, 212, 255, 0.3)'
-                                            : '0 2px 10px rgba(0, 0, 0, 0.2)',
+                                            ? '0 4px 20px rgba(0, 212, 255, 0.4)'
+                                            : '0 2px 15px rgba(0, 0, 0, 0.3)',
                                         whiteSpace: 'pre-wrap',
-                                        wordBreak: 'break-word'
+                                        wordBreak: 'break-word',
+                                        backdropFilter: msg.role === 'assistant' ? 'blur(10px)' : 'none'
                                     }}>
                                         {msg.text}
 
@@ -328,61 +431,115 @@ export default function AiChat() {
                             ))}
                             {loading && (
                                 <div style={{
-                                    alignSelf: 'flex-start',
-                                    background: 'rgba(20, 35, 50, 0.8)',
-                                    padding: '0.85rem 1.1rem',
-                                    borderRadius: '12px',
-                                    borderBottomLeftRadius: '2px',
-                                    border: '1px solid rgba(0, 212, 255, 0.2)'
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'flex-start'
                                 }}>
-                                    <Loader2 size={18} className="animate-spin" color="#00d4ff" />
+                                    <div style={{
+                                        background: 'rgba(20, 35, 50, 0.6)',
+                                        padding: '1.2rem 1.5rem',
+                                        borderRadius: '16px',
+                                        border: '1px solid rgba(0, 212, 255, 0.2)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.75rem',
+                                        backdropFilter: 'blur(10px)'
+                                    }}>
+                                        <Loader2 size={20} className="animate-spin" color="#00d4ff" />
+                                        <span style={{ color: 'rgba(122, 162, 196, 0.9)', fontSize: '0.9rem' }}>Jarvis is thinking...</span>
+                                    </div>
                                 </div>
                             )}
                             <div ref={chatEndRef} />
+                            </div>
                         </div>
 
-                        {/* Input */}
-                        <div style={{ padding: '1rem', borderTop: '1px solid rgba(0, 212, 255, 0.2)', background: 'rgba(10, 14, 20, 0.5)' }}>
-                            <div style={{ display: 'flex', gap: '0.75rem' }}>
-                                <input
-                                    className="input"
-                                    placeholder="Enter command..."
-                                    style={{
-                                        borderRadius: '24px',
-                                        paddingLeft: '1.25rem',
-                                        background: 'rgba(20, 35, 50, 0.6)',
-                                        border: '1px solid rgba(0, 212, 255, 0.2)',
-                                        marginBottom: 0
-                                    }}
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                                />
-                                <button
-                                    onClick={handleSend}
-                                    disabled={!input.trim() || loading}
-                                    style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        borderRadius: '50%',
-                                        background: 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)',
-                                        color: '#0a0e14',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                        flexShrink: 0,
-                                        boxShadow: '0 0 20px rgba(0, 212, 255, 0.4)',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    <Send size={20} />
-                                </button>
+                        {/* Input Area - Fixed Bottom, ChatGPT Style */}
+                        <div style={{
+                            padding: '1.5rem 2rem 2rem',
+                            borderTop: '1px solid rgba(0, 212, 255, 0.2)',
+                            background: 'rgba(10, 14, 20, 0.9)',
+                            backdropFilter: 'blur(20px)',
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}>
+                            <div style={{
+                                width: '100%',
+                                maxWidth: '900px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem'
+                            }}>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                                    <input
+                                        className="input"
+                                        placeholder="Ask me anything... (Press Enter to send)"
+                                        style={{
+                                            flex: 1,
+                                            borderRadius: '16px',
+                                            padding: '1rem 1.5rem',
+                                            background: 'rgba(20, 35, 50, 0.7)',
+                                            border: '2px solid rgba(0, 212, 255, 0.3)',
+                                            marginBottom: 0,
+                                            fontSize: '1rem',
+                                            color: '#f0f8ff',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                        onFocus={(e) => {
+                                            e.target.style.borderColor = 'rgba(0, 212, 255, 0.6)';
+                                            e.target.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.2)';
+                                        }}
+                                        onBlur={(e) => {
+                                            e.target.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                                            e.target.style.boxShadow = 'none';
+                                        }}
+                                    />
+                                    <button
+                                        onClick={handleSend}
+                                        disabled={!input.trim() || loading}
+                                        style={{
+                                            width: '56px',
+                                            height: '56px',
+                                            borderRadius: '50%',
+                                            background: input.trim() && !loading
+                                                ? 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)'
+                                                : 'rgba(20, 35, 50, 0.5)',
+                                            color: input.trim() && !loading ? '#0a0e14' : 'rgba(122, 162, 196, 0.5)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            border: 'none',
+                                            cursor: input.trim() && !loading ? 'pointer' : 'not-allowed',
+                                            flexShrink: 0,
+                                            boxShadow: input.trim() && !loading ? '0 0 30px rgba(0, 212, 255, 0.5)' : 'none',
+                                            transition: 'all 0.2s ease',
+                                            transform: 'scale(1)'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (input.trim() && !loading) {
+                                                e.currentTarget.style.transform = 'scale(1.1)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.transform = 'scale(1)';
+                                        }}
+                                    >
+                                        <Send size={24} />
+                                    </button>
+                                </div>
+                                <p style={{
+                                    margin: 0,
+                                    fontSize: '0.75rem',
+                                    color: 'rgba(122, 162, 196, 0.6)',
+                                    textAlign: 'center',
+                                    letterSpacing: '0.03em'
+                                }}>
+                                    🧠 Neural link active • 🎤 Voice command enabled • 💬 Chat with full AI knowledge
+                                </p>
                             </div>
-                            <p style={{ margin: '0.6rem 0 0', fontSize: '0.7rem', color: 'rgba(122, 162, 196, 0.7)', textAlign: 'center', letterSpacing: '0.03em' }}>
-                                Neural link active • Voice command enabled
-                            </p>
                         </div>
                     </div>
                 </div>

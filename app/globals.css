@@ -952,3 +952,114 @@ p {
     width: 100%;
   }
 }
+
+/* ========================================
+   JARVIS FULLSCREEN ANIMATIONS
+   ======================================== */
+
+@keyframes jarvisFullscreenIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* Particles for fullscreen background */
+.jarvis-particles-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.2;
+}
+
+.jarvis-particles-fullscreen::before,
+.jarvis-particles-fullscreen::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.3) 0%, transparent 70%);
+  animation: floatParticle 15s ease-in-out infinite;
+}
+
+.jarvis-particles-fullscreen::before {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.jarvis-particles-fullscreen::after {
+  bottom: 20%;
+  right: 10%;
+  animation-delay: 7s;
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -50px) scale(1.2);
+  }
+  66% {
+    transform: translate(-50px, 50px) scale(0.8);
+  }
+}
+
+/* Scrollbar styling for fullscreen chat */
+.jarvis-messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.jarvis-messages-container::-webkit-scrollbar-track {
+  background: rgba(10, 14, 20, 0.5);
+}
+
+.jarvis-messages-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 4px;
+}
+
+.jarvis-messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.5);
+}
