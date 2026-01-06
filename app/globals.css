@@ -778,6 +778,11 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+/* Inbox Layout - Desktop */
+.inbox-layout {
+  grid-template-columns: 400px 1fr;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
@@ -835,6 +840,21 @@ p {
   /* Inbox Page - Email list and detail view stack */
   .inbox-layout {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Hide email list when email is selected on mobile */
+  .inbox-layout.has-selection .email-list-panel {
+    display: none !important;
+  }
+
+  /* Show back button on mobile */
+  .mobile-back-btn {
+    display: flex !important;
+  }
+
+  /* Make detail panel full height on mobile */
+  .email-detail-panel {
+    min-height: calc(100vh - 200px) !important;
   }
 
   /* Batch Page - Settings sidebar stacks below */
