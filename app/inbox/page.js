@@ -12,7 +12,8 @@ import {
     Loader2,
     Trash2,
     Send,
-    CornerUpLeft
+    CornerUpLeft,
+    ArrowLeft
 } from 'lucide-react';
 
 export default function InboxPage() {
@@ -244,8 +245,8 @@ Geef alleen de tekst van het antwoord, geen aanhef of afsluiting die ik zelf al 
                     <p>Wanneer iemand een email stuurt naar je Resend adres, verschijnt deze hier.</p>
                 </div>
             ) : (
-                <div className="inbox-layout" style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '2rem' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className={`inbox-layout ${selectedEmail ? 'has-selection' : ''}`} style={{ display: 'grid', gap: '1.5rem' }}>
+                    <div className="email-list-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         {filteredEmails.length > 0 ? filteredEmails.map((email) => (
                             <div
                                 key={email.id}
@@ -297,10 +298,17 @@ Geef alleen de tekst van het antwoord, geen aanhef of afsluiting die ik zelf al 
                         )}
                     </div>
 
-                    <div className="card" style={{ minHeight: '600px', display: 'flex', flexDirection: 'column' }}>
+                    <div className={`card email-detail-panel ${selectedEmail ? 'has-selection' : ''}`} style={{ minHeight: '600px', display: 'flex', flexDirection: 'column' }}>
                         {selectedEmail ? (
                             <>
                                 <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem', marginBottom: '1.5rem' }}>
+                                    <button
+                                        className="mobile-back-btn"
+                                        onClick={() => setSelectedEmail(null)}
+                                        style={{ display: 'none', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', padding: 0 }}
+                                    >
+                                        <ArrowLeft size={18} /> Terug naar inbox
+                                    </button>
                                     <h2 style={{ marginBottom: '0.5rem' }}>{selectedEmail.subject}</h2>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
