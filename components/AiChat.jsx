@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Loader2, Bot, Mail, Mic, MicOff, Phone, PhoneOff, Menu, Search, Plus, Trash2, Edit2, Download } from 'lucide-react';
+import { MessageSquare, X, Send, Loader2, Bot, Mail, Mic, MicOff, Phone, PhoneOff, Menu, Search, Plus, Trash2, Edit2, Download, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { getJarvisSounds } from '@/lib/jarvis-sounds';
 import { JarvisSessions } from '@/lib/jarvis-sessions';
@@ -55,6 +55,13 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     const [currentSessionId, setCurrentSessionId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showExportMenu, setShowExportMenu] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
+    const [settings, setSettings] = useState({
+        voice: 'nova', // nova, alloy, echo, fable, onyx, shimmer
+        ttsSpeed: 1.0, // 0.5 - 2.0
+        personalityMode: 'casual', // professional, casual, technical
+        autoSpeak: true
+    });
     const chatEndRef = useRef(null);
     const recognitionRef = useRef(null);
     const soundsRef = useRef(null);
@@ -65,6 +72,16 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     // Initialize Jarvis sounds
     useEffect(() => {
         soundsRef.current = getJarvisSounds();
+
+        // Load settings from localStorage
+        const savedSettings = localStorage.getItem('jarvis_settings');
+        if (savedSettings) {
+            try {
+                setSettings(JSON.parse(savedSettings));
+            } catch (error) {
+                console.error('Failed to load settings:', error);
+            }
+        }
 
         // Auto-request audio/notification permissions on mount (only once)
         const hasRequestedPermissions = localStorage.getItem('jarvis_permissions_requested');
@@ -78,6 +95,11 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             localStorage.setItem('jarvis_permissions_requested', 'true');
         }
     }, []);
+
+    // Save settings to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('jarvis_settings', JSON.stringify(settings));
+    }, [settings]);
 
     const scrollToBottom = (behavior = 'smooth') => {
         if (chatEndRef.current) {
@@ -250,7 +272,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
     // Text-to-Speech function for conversation mode
     const speakText = async (text) => {
-        if (!text) return;
+        if (!text || !settings.autoSpeak) return;
 
         try {
             setIsSpeaking(true);
@@ -265,7 +287,11 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             const response = await fetch('/api/jarvis/text-to-speech', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: cleanText })
+                body: JSON.stringify({
+                    text: cleanText,
+                    voice: settings.voice,
+                    speed: settings.ttsSpeed
+                })
             });
 
             if (!response.ok) throw new Error('TTS failed');
@@ -876,18 +902,16 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                         transition: 'opacity 0.5s ease',
                         zIndex: 1
                     }}>
-                        {/* Header Bar - Compact with Living Pulse */}
+                        {/* Header Bar - Clean & Subtle */}
                         <div style={{
                             padding: '0.75rem 1.25rem',
-                            background: 'rgba(10, 14, 20, 0.8)',
+                            background: 'rgba(10, 14, 20, 0.9)',
                             backdropFilter: 'blur(20px)',
-                            borderBottom: '1px solid rgba(0, 212, 255, 0.2)',
+                            borderBottom: '1px solid rgba(0, 212, 255, 0.15)',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.75rem',
-                            zIndex: 10,
-                            boxShadow: '0 4px 20px rgba(0, 212, 255, 0.15)',
-                            animation: 'pulse 3s ease-in-out infinite 0.5s'
+                            zIndex: 10
                         }}>
                             {/* Hamburger Menu Button */}
                             <button
@@ -945,36 +969,69 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                 <X size={18} color="#00d4ff" />
                             </button>
 
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                {/* Logo - alleen dit pulst */}
                                 <div style={{
-                                    width: '38px',
-                                    height: '38px',
-                                    borderRadius: '10px',
-                                    background: 'radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.3), transparent)',
-                                    border: '1px solid rgba(0, 212, 255, 0.4)',
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '8px',
+                                    background: 'radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.2), transparent)',
+                                    border: '1px solid rgba(0, 212, 255, 0.3)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     overflow: 'hidden',
                                     flexShrink: 0,
-                                    boxShadow: '0 0 15px rgba(0, 212, 255, 0.4)',
-                                    animation: 'pulse 2s ease-in-out infinite'
+                                    boxShadow: '0 0 12px rgba(0, 212, 255, 0.3)',
+                                    animation: 'pulse 2.5s ease-in-out infinite'
                                 }}>
                                     <img
                                         src="/jarvis-icon.png"
                                         alt="Jarvis"
-                                        width={30}
-                                        height={30}
-                                        style={{ borderRadius: '6px', objectFit: 'cover' }}
+                                        width={24}
+                                        height={24}
+                                        style={{ borderRadius: '4px', objectFit: 'cover' }}
                                     />
                                 </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <h4 style={{ margin: 0, fontSize: '1rem', color: '#00d4ff', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>J.A.R.V.I.S</h4>
-                                    <p style={{ margin: 0, fontSize: '0.7rem', color: 'rgba(122, 162, 196, 0.8)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Just A Rather Very Intelligent System</p>
-                                </div>
+                                {/* Alleen naam - geen subtitel */}
+                                <h4 style={{
+                                    margin: 0,
+                                    fontSize: '0.95rem',
+                                    color: '#00d4ff',
+                                    fontWeight: 600,
+                                    letterSpacing: '0.1em',
+                                    textTransform: 'uppercase'
+                                }}>JARVIS</h4>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                                {/* Settings Button */}
+                                <button
+                                    onClick={() => setShowSettings(true)}
+                                    style={{
+                                        width: '36px',
+                                        height: '36px',
+                                        borderRadius: '50%',
+                                        background: 'rgba(0, 212, 255, 0.1)',
+                                        border: '1px solid rgba(0, 212, 255, 0.3)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
+                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                    }}
+                                >
+                                    <Settings size={16} color="#00d4ff" />
+                                </button>
+
                                 {/* Export Button with Dropdown */}
                                 <div style={{ position: 'relative' }}>
                                     <button
@@ -1312,6 +1369,176 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                             </div>
                         )}
 
+                        {/* Settings Modal */}
+                        {showSettings && (
+                            <div style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                background: 'rgba(0, 0, 0, 0.85)',
+                                backdropFilter: 'blur(10px)',
+                                zIndex: 200,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                animation: 'fadeIn 0.2s ease-out'
+                            }}
+                                onClick={() => setShowSettings(false)}
+                            >
+                                <div
+                                    style={{
+                                        width: '90%',
+                                        maxWidth: '500px',
+                                        background: 'rgba(10, 14, 20, 0.98)',
+                                        borderRadius: '16px',
+                                        border: '1px solid rgba(0, 212, 255, 0.3)',
+                                        padding: '2rem',
+                                        boxShadow: '0 10px 50px rgba(0, 212, 255, 0.3)',
+                                        animation: 'slideInFromBottom 0.3s ease-out'
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* Settings Header */}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                                        <h3 style={{ margin: 0, color: '#00d4ff', fontSize: '1.3rem', fontWeight: 600, letterSpacing: '0.05em' }}>⚙️ JARVIS SETTINGS</h3>
+                                        <button
+                                            onClick={() => setShowSettings(false)}
+                                            style={{
+                                                width: '32px',
+                                                height: '32px',
+                                                borderRadius: '50%',
+                                                background: 'rgba(255, 68, 68, 0.1)',
+                                                border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <X size={18} color="#ff4444" />
+                                        </button>
+                                    </div>
+
+                                    {/* Voice Selection */}
+                                    <div style={{ marginBottom: '1.5rem' }}>
+                                        <label style={{ display: 'block', color: 'rgba(122, 162, 196, 0.9)', fontSize: '0.85rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+                                            🎙️ Voice
+                                        </label>
+                                        <select
+                                            value={settings.voice}
+                                            onChange={(e) => setSettings({ ...settings, voice: e.target.value })}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.75rem',
+                                                background: 'rgba(20, 35, 50, 0.7)',
+                                                border: '1px solid rgba(0, 212, 255, 0.3)',
+                                                borderRadius: '8px',
+                                                color: '#f0f8ff',
+                                                fontSize: '0.9rem',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <option value="nova">Nova (Recommended)</option>
+                                            <option value="alloy">Alloy</option>
+                                            <option value="echo">Echo</option>
+                                            <option value="fable">Fable</option>
+                                            <option value="onyx">Onyx</option>
+                                            <option value="shimmer">Shimmer</option>
+                                        </select>
+                                    </div>
+
+                                    {/* TTS Speed */}
+                                    <div style={{ marginBottom: '1.5rem' }}>
+                                        <label style={{ display: 'block', color: 'rgba(122, 162, 196, 0.9)', fontSize: '0.85rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+                                            ⚡ Speech Speed: {settings.ttsSpeed.toFixed(1)}x
+                                        </label>
+                                        <input
+                                            type="range"
+                                            min="0.5"
+                                            max="2.0"
+                                            step="0.1"
+                                            value={settings.ttsSpeed}
+                                            onChange={(e) => setSettings({ ...settings, ttsSpeed: parseFloat(e.target.value) })}
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'rgba(122, 162, 196, 0.6)', marginTop: '0.25rem' }}>
+                                            <span>0.5x (Langzaam)</span>
+                                            <span>1.0x</span>
+                                            <span>2.0x (Snel)</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Personality Mode */}
+                                    <div style={{ marginBottom: '1.5rem' }}>
+                                        <label style={{ display: 'block', color: 'rgba(122, 162, 196, 0.9)', fontSize: '0.85rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+                                            🎭 Personality Mode
+                                        </label>
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            {['professional', 'casual', 'technical'].map(mode => (
+                                                <button
+                                                    key={mode}
+                                                    onClick={() => setSettings({ ...settings, personalityMode: mode })}
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '0.75rem',
+                                                        background: settings.personalityMode === mode
+                                                            ? 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)'
+                                                            : 'rgba(20, 35, 50, 0.7)',
+                                                        color: settings.personalityMode === mode ? '#0a0e14' : '#f0f8ff',
+                                                        border: settings.personalityMode === mode ? 'none' : '1px solid rgba(0, 212, 255, 0.3)',
+                                                        borderRadius: '8px',
+                                                        fontSize: '0.8rem',
+                                                        fontWeight: settings.personalityMode === mode ? 600 : 400,
+                                                        cursor: 'pointer',
+                                                        textTransform: 'capitalize',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                >
+                                                    {mode}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Auto-Speak Toggle */}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(20, 35, 50, 0.5)', borderRadius: '8px', border: '1px solid rgba(0, 212, 255, 0.2)' }}>
+                                        <div>
+                                            <div style={{ color: '#f0f8ff', fontSize: '0.9rem', fontWeight: 500 }}>🔊 Auto-Speak</div>
+                                            <div style={{ color: 'rgba(122, 162, 196, 0.7)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                Jarvis spreekt automatisch antwoorden
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setSettings({ ...settings, autoSpeak: !settings.autoSpeak })}
+                                            style={{
+                                                width: '50px',
+                                                height: '28px',
+                                                borderRadius: '14px',
+                                                background: settings.autoSpeak ? 'linear-gradient(135deg, #00ff88 0%, #00cc66 100%)' : 'rgba(122, 162, 196, 0.3)',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '2px',
+                                                left: settings.autoSpeak ? '24px' : '2px',
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                background: '#fff',
+                                                transition: 'all 0.2s ease'
+                                            }} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Messages - ChatGPT Style Center Layout */}
                         <div
                             className="jarvis-messages-container"
@@ -1537,7 +1764,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                         {conversationMode ? <Phone size={20} /> : <PhoneOff size={20} />}
                                     </button>
 
-                                    <input
+                                    <textarea
                                         className="input"
                                         placeholder={isListening ? "Luisteren... 🎤" : "Ask me anything..."}
                                         style={{
@@ -1549,11 +1776,28 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                             marginBottom: 0,
                                             fontSize: '0.95rem',
                                             color: '#f0f8ff',
-                                            transition: 'all 0.2s ease'
+                                            transition: 'all 0.2s ease',
+                                            resize: 'none',
+                                            minHeight: '48px',
+                                            maxHeight: '150px',
+                                            overflow: 'auto',
+                                            fontFamily: 'inherit'
                                         }}
+                                        rows={1}
                                         value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                        onChange={(e) => {
+                                            setInput(e.target.value);
+                                            // Auto-resize textarea
+                                            e.target.style.height = 'auto';
+                                            e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
+                                        }}
+                                        onKeyDown={(e) => {
+                                            // Shift+Enter = nieuwe regel, Enter = verstuur
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleSend();
+                                            }
+                                        }}
                                         onFocus={(e) => {
                                             e.target.style.borderColor = 'rgba(0, 212, 255, 0.6)';
                                             e.target.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.2)';

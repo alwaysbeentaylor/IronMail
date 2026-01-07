@@ -3,14 +3,14 @@ import { openai } from '@/lib/ai';
 
 export async function POST(req) {
     try {
-        const { text } = await req.json();
+        const { text, voice = 'nova', speed = 1.0 } = await req.json();
 
-        // Use OpenAI TTS with Dutch voice
+        // Use OpenAI TTS with configurable voice
         const response = await openai.audio.speech.create({
             model: "tts-1",
-            voice: "nova", // Nova is good for Dutch
+            voice: voice, // nova, alloy, echo, fable, onyx, shimmer
             input: text,
-            speed: 1.0
+            speed: Math.max(0.25, Math.min(4.0, speed)) // Clamp between 0.25 and 4.0
         });
 
         // Convert response to buffer
