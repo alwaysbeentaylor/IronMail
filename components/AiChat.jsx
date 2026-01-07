@@ -67,6 +67,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     });
     const [debugLogs, setDebugLogs] = useState([]);
     const [showDebugPanel, setShowDebugPanel] = useState(false);
+    const iosPrimedRef = useRef(false); // Track if iOS speechSynthesis is primed
     const chatEndRef = useRef(null);
     const recognitionRef = useRef(null);
     const soundsRef = useRef(null);
@@ -385,6 +386,39 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
         }
     };
 
+    // iOS FIX: Prime speechSynthesis by playing a silent utterance DIRECTLY in user click
+    const primeIOSSpeechSynthesis = () => {
+        if (iosPrimedRef.current) {
+            debugLog('🔊 [iOS Prime] Already primed, skipping');
+            return;
+        }
+
+        if ('speechSynthesis' in window) {
+            try {
+                debugLog('🔊 [iOS Prime] Priming iOS speechSynthesis...');
+
+                // Play a short silent utterance to "unlock" iOS speechSynthesis
+                const primer = new SpeechSynthesisUtterance(' ');
+                primer.volume = 0.01; // Nearly silent
+                primer.rate = 10; // Fast
+
+                primer.onend = () => {
+                    iosPrimedRef.current = true;
+                    debugLog('🔊 [iOS Prime] ✅ iOS speechSynthesis PRIMED!');
+                };
+
+                primer.onerror = () => {
+                    debugLog('🔊 [iOS Prime] ⚠️ Primer failed, but continuing...');
+                };
+
+                speechSynthesis.speak(primer);
+                debugLog('🔊 [iOS Prime] Primer utterance spoken');
+            } catch (e) {
+                debugLog('🔊 [iOS Prime] ❌ Error:', e.message);
+            }
+        }
+    };
+
     // Text-to-Speech function for conversation mode
     const speakText = async (text) => {
         debugLog('🔊 [TTS] Called with text:', text?.substring(0, 50));
@@ -689,6 +723,9 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
     // Toggle conversation mode - microfoon direct AAN!
     const toggleConversationMode = async () => {
+        // iOS FIX: Prime speechSynthesis IMMEDIATELY in click handler!
+        primeIOSSpeechSynthesis();
+
         debugLog('🎤 [CONVO] Toggle clicked! Current mode:', conversationMode);
         debugLog('🎤 [CONVO] Recognition available:', !!recognitionRef.current);
         debugLog('🎤 [CONVO] SpeechSynthesis available:', 'speechSynthesis' in window);
@@ -2197,7 +2234,11 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                         {/* Replay button voor assistant messages */}
                                         {msg.role === 'assistant' && !msg.fadeOut && (
                                             <button
-                                                onClick={() => speakText(msg.text)}
+                                                onClick={() => {
+                                                    // iOS FIX: Prime speechSynthesis IMMEDIATELY in click!
+                                                    primeIOSSpeechSynthesis();
+                                                    speakText(msg.text);
+                                                }}
                                                 disabled={isSpeaking}
                                                 title="Speel dit bericht af"
                                                 style={{
