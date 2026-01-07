@@ -19,10 +19,12 @@ const BOOT_SEQUENCE = [
 
 // Cool welcome messages that fade away like snow in the sun ❄️☀️
 const getWelcomeMessage = () => {
+    // Nederlandse tijd (Europe/Amsterdam)
     const now = new Date();
-    const hour = now.getHours();
-    const day = now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const time = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const nlTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Amsterdam' }));
+    const hour = nlTime.getHours();
+    const day = nlTime.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Europe/Amsterdam' });
+    const time = nlTime.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Amsterdam' });
 
     const greetings = [
         `Good day, sir. 🎩`,
@@ -60,7 +62,8 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
         voice: 'nova', // nova, alloy, echo, fable, onyx, shimmer
         ttsSpeed: 1.0, // 0.5 - 2.0
         personalityMode: 'casual', // professional, casual, technical
-        autoSpeak: true
+        autoSpeak: true,
+        speakWelcome: true // Speak welcome greeting on login
     });
     const chatEndRef = useRef(null);
     const recognitionRef = useRef(null);
@@ -115,7 +118,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
         scrollToBottom(messages.length <= 1 ? 'auto' : 'smooth');
     }, [messages, loading]);
 
-    // Boot sequence effect
+    // Boot sequence effect with welcome speech
     useEffect(() => {
         if (isOpen && !bootComplete) {
             setIsBooting(true);
@@ -133,6 +136,13 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                             setBootComplete(true);
                             // Play completion sound
                             soundsRef.current?.playOpen();
+
+                            // Speak welcome greeting if enabled
+                            if (settings.speakWelcome && messages.length > 0 && messages[0].fadeOut) {
+                                setTimeout(() => {
+                                    speakText(messages[0].text);
+                                }, 800);
+                            }
                         }, 600);
                     }
                 }, step.delay);
@@ -234,11 +244,15 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                 e.preventDefault();
                 toggleVoiceInput();
             }
-            // Esc → Close Jarvis
+            // Esc → Close sidebar first, then settings, then Jarvis
             else if (e.key === 'Escape') {
                 e.preventDefault();
-                if (sidebarOpen) {
+                if (showSettings) {
+                    setShowSettings(false);
+                } else if (sidebarOpen) {
                     setSidebarOpen(false);
+                } else if (showExportMenu) {
+                    setShowExportMenu(false);
                 } else {
                     handleOpen();
                 }
@@ -308,8 +322,19 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                 URL.revokeObjectURL(audioUrl);
 
                 // Auto-start listening again in conversation mode
-                if (conversationMode && !isListening) {
-                    setTimeout(() => toggleVoiceInput(), 500);
+                if (conversationMode && recognitionRef.current) {
+                    setTimeout(() => {
+                        if (!isListening) {
+                            try {
+                                setInput(''); // Clear input before starting
+                                recognitionRef.current.start();
+                                setIsListening(true);
+                                soundsRef.current?.playVoiceStart();
+                            } catch (error) {
+                                console.error('Failed to restart listening:', error);
+                            }
+                        }
+                    }, 500);
                 }
             };
 
@@ -367,16 +392,23 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     const loadSessions = async () => {
         const allSessions = await JarvisSessions.getAllSessions();
         setSessions(allSessions);
-        const currentId = await JarvisSessions.getCurrentSessionId();
+        let currentId = await JarvisSessions.getCurrentSessionId();
+
+        // If no current session, create one
+        if (!currentId || allSessions.length === 0) {
+            const newSession = await JarvisSessions.createNewSession();
+            currentId = newSession.id;
+        }
+
         setCurrentSessionId(currentId);
     };
 
     // Load current session on mount
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen && bootComplete) {
             loadSessions();
         }
-    }, [isOpen]);
+    }, [isOpen, bootComplete]);
 
     // Create new chat session
     const handleNewChat = async () => {
@@ -441,7 +473,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     // Export chat to TXT
     const exportToTxt = () => {
         const now = new Date();
-        const timestamp = now.toLocaleDateString('nl-NL') + ' ' + now.toLocaleTimeString('nl-NL');
+        const timestamp = now.toLocaleDateString('nl-NL', { timeZone: 'Europe/Amsterdam' }) + ' ' + now.toLocaleTimeString('nl-NL', { timeZone: 'Europe/Amsterdam' });
 
         let content = `JARVIS CHAT EXPORT\n`;
         content += `Exported: ${timestamp}\n`;
@@ -473,7 +505,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     // Export chat to Markdown (better than PDF for now, readable everywhere)
     const exportToMarkdown = () => {
         const now = new Date();
-        const timestamp = now.toLocaleDateString('nl-NL') + ' ' + now.toLocaleTimeString('nl-NL');
+        const timestamp = now.toLocaleDateString('nl-NL', { timeZone: 'Europe/Amsterdam' }) + ' ' + now.toLocaleTimeString('nl-NL', { timeZone: 'Europe/Amsterdam' });
 
         let content = `# JARVIS CHAT EXPORT\n\n`;
         content += `**Exported:** ${timestamp}  \n`;
@@ -1004,139 +1036,8 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                 }}>JARVIS</h4>
                             </div>
 
+                            {/* Online indicator */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
-                                {/* Settings Button */}
-                                <button
-                                    onClick={() => setShowSettings(true)}
-                                    style={{
-                                        width: '36px',
-                                        height: '36px',
-                                        borderRadius: '50%',
-                                        background: 'rgba(0, 212, 255, 0.1)',
-                                        border: '1px solid rgba(0, 212, 255, 0.3)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
-                                        e.currentTarget.style.transform = 'scale(1.1)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
-                                        e.currentTarget.style.transform = 'scale(1)';
-                                    }}
-                                >
-                                    <Settings size={16} color="#00d4ff" />
-                                </button>
-
-                                {/* Export Button with Dropdown */}
-                                <div style={{ position: 'relative' }}>
-                                    <button
-                                        onClick={() => setShowExportMenu(!showExportMenu)}
-                                        style={{
-                                            width: '36px',
-                                            height: '36px',
-                                            borderRadius: '50%',
-                                            background: showExportMenu ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 212, 255, 0.1)',
-                                            border: '1px solid rgba(0, 212, 255, 0.3)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            cursor: 'pointer',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
-                                            e.currentTarget.style.transform = 'scale(1.1)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = showExportMenu ? 'rgba(0, 212, 255, 0.2)' : 'rgba(0, 212, 255, 0.1)';
-                                            e.currentTarget.style.transform = 'scale(1)';
-                                        }}
-                                    >
-                                        <Download size={16} color="#00d4ff" />
-                                    </button>
-
-                                    {/* Export Dropdown Menu */}
-                                    {showExportMenu && (
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '45px',
-                                            right: 0,
-                                            background: 'rgba(10, 14, 20, 0.95)',
-                                            backdropFilter: 'blur(20px)',
-                                            border: '1px solid rgba(0, 212, 255, 0.3)',
-                                            borderRadius: '8px',
-                                            padding: '0.5rem',
-                                            minWidth: '150px',
-                                            zIndex: 1000,
-                                            boxShadow: '0 4px 20px rgba(0, 212, 255, 0.3)',
-                                            animation: 'fadeIn 0.2s ease-out'
-                                        }}>
-                                            <button
-                                                onClick={() => {
-                                                    exportToTxt();
-                                                    setShowExportMenu(false);
-                                                }}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.6rem 0.75rem',
-                                                    background: 'rgba(20, 35, 50, 0.5)',
-                                                    border: '1px solid rgba(0, 212, 255, 0.2)',
-                                                    borderRadius: '6px',
-                                                    color: '#f0f8ff',
-                                                    fontSize: '0.8rem',
-                                                    cursor: 'pointer',
-                                                    marginBottom: '0.5rem',
-                                                    textAlign: 'left',
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
-                                                    e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.4)';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(20, 35, 50, 0.5)';
-                                                    e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.2)';
-                                                }}
-                                            >
-                                                📄 Export as TXT
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    exportToMarkdown();
-                                                    setShowExportMenu(false);
-                                                }}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '0.6rem 0.75rem',
-                                                    background: 'rgba(20, 35, 50, 0.5)',
-                                                    border: '1px solid rgba(0, 212, 255, 0.2)',
-                                                    borderRadius: '6px',
-                                                    color: '#f0f8ff',
-                                                    fontSize: '0.8rem',
-                                                    cursor: 'pointer',
-                                                    textAlign: 'left',
-                                                    transition: 'all 0.2s ease'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
-                                                    e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.4)';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(20, 35, 50, 0.5)';
-                                                    e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.2)';
-                                                }}
-                                            >
-                                                📝 Export as Markdown
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
                                 <div style={{
                                     width: '8px',
                                     height: '8px',
@@ -1157,23 +1058,40 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                             </div>
                         </div>
 
-                        {/* ChatGPT-Style Sidebar */}
+                        {/* ChatGPT-Style Sidebar with Overlay */}
                         {sidebarOpen && (
-                            <div style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                bottom: 0,
-                                width: '320px',
-                                background: 'rgba(10, 14, 20, 0.95)',
-                                backdropFilter: 'blur(20px)',
-                                borderRight: '1px solid rgba(0, 212, 255, 0.2)',
-                                zIndex: 100,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                animation: 'slideInFromLeft 0.3s ease-out',
-                                boxShadow: '4px 0 30px rgba(0, 212, 255, 0.2)'
-                            }}>
+                            <>
+                                {/* Dark overlay - click to close */}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'rgba(0, 0, 0, 0.5)',
+                                        zIndex: 99,
+                                        animation: 'fadeIn 0.2s ease-out'
+                                    }}
+                                    onClick={() => setSidebarOpen(false)}
+                                />
+
+                                {/* Sidebar */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    width: '320px',
+                                    background: 'rgba(10, 14, 20, 0.98)',
+                                    backdropFilter: 'blur(20px)',
+                                    borderRight: '1px solid rgba(0, 212, 255, 0.2)',
+                                    zIndex: 100,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    animation: 'slideInFromLeft 0.3s ease-out',
+                                    boxShadow: '4px 0 30px rgba(0, 212, 255, 0.2)'
+                                }}>
                                 {/* Sidebar Header */}
                                 <div style={{
                                     padding: '1rem',
@@ -1356,17 +1274,124 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                     )}
                                 </div>
 
-                                {/* Sidebar Footer - Info */}
+                                {/* Sidebar Footer - Actions */}
                                 <div style={{
                                     padding: '1rem',
                                     borderTop: '1px solid rgba(0, 212, 255, 0.2)',
-                                    fontSize: '0.7rem',
-                                    color: 'rgba(122, 162, 196, 0.5)',
-                                    textAlign: 'center'
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.75rem'
                                 }}>
-                                    {sessions.length} total chats • Last 50 saved
+                                    {/* Settings Button */}
+                                    <button
+                                        onClick={() => {
+                                            setShowSettings(true);
+                                            setSidebarOpen(false);
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            background: 'rgba(20, 35, 50, 0.7)',
+                                            border: '1px solid rgba(0, 212, 255, 0.3)',
+                                            borderRadius: '8px',
+                                            color: '#f0f8ff',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            cursor: 'pointer',
+                                            fontSize: '0.85rem',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.5)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(20, 35, 50, 0.7)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                                        }}
+                                    >
+                                        <Settings size={16} color="#00d4ff" />
+                                        <span>Settings</span>
+                                    </button>
+
+                                    {/* Export Buttons */}
+                                    <button
+                                        onClick={() => {
+                                            exportToTxt();
+                                            setSidebarOpen(false);
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            background: 'rgba(20, 35, 50, 0.7)',
+                                            border: '1px solid rgba(0, 212, 255, 0.3)',
+                                            borderRadius: '8px',
+                                            color: '#f0f8ff',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            cursor: 'pointer',
+                                            fontSize: '0.85rem',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.5)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(20, 35, 50, 0.7)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                                        }}
+                                    >
+                                        <Download size={16} color="#00d4ff" />
+                                        <span>Export Chat (TXT)</span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            exportToMarkdown();
+                                            setSidebarOpen(false);
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem',
+                                            background: 'rgba(20, 35, 50, 0.7)',
+                                            border: '1px solid rgba(0, 212, 255, 0.3)',
+                                            borderRadius: '8px',
+                                            color: '#f0f8ff',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            cursor: 'pointer',
+                                            fontSize: '0.85rem',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(0, 212, 255, 0.15)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.5)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(20, 35, 50, 0.7)';
+                                            e.currentTarget.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                                        }}
+                                    >
+                                        <Download size={16} color="#00d4ff" />
+                                        <span>Export Chat (Markdown)</span>
+                                    </button>
+
+                                    {/* Info */}
+                                    <div style={{
+                                        fontSize: '0.7rem',
+                                        color: 'rgba(122, 162, 196, 0.5)',
+                                        textAlign: 'center',
+                                        marginTop: '0.25rem'
+                                    }}>
+                                        {sessions.length} total chats
+                                    </div>
                                 </div>
-                            </div>
+                                </div>
+                            </>
                         )}
 
                         {/* Settings Modal */}
@@ -1503,7 +1528,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                     </div>
 
                                     {/* Auto-Speak Toggle */}
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(20, 35, 50, 0.5)', borderRadius: '8px', border: '1px solid rgba(0, 212, 255, 0.2)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(20, 35, 50, 0.5)', borderRadius: '8px', border: '1px solid rgba(0, 212, 255, 0.2)', marginBottom: '0.75rem' }}>
                                         <div>
                                             <div style={{ color: '#f0f8ff', fontSize: '0.9rem', fontWeight: 500 }}>🔊 Auto-Speak</div>
                                             <div style={{ color: 'rgba(122, 162, 196, 0.7)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
@@ -1527,6 +1552,40 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                                 position: 'absolute',
                                                 top: '2px',
                                                 left: settings.autoSpeak ? '24px' : '2px',
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                background: '#fff',
+                                                transition: 'all 0.2s ease'
+                                            }} />
+                                        </button>
+                                    </div>
+
+                                    {/* Welcome Speech Toggle */}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'rgba(20, 35, 50, 0.5)', borderRadius: '8px', border: '1px solid rgba(0, 212, 255, 0.2)' }}>
+                                        <div>
+                                            <div style={{ color: '#f0f8ff', fontSize: '0.9rem', fontWeight: 500 }}>👋 Welcome Greeting</div>
+                                            <div style={{ color: 'rgba(122, 162, 196, 0.7)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                                Jarvis spreekt begroeting bij inlog
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setSettings({ ...settings, speakWelcome: !settings.speakWelcome })}
+                                            style={{
+                                                width: '50px',
+                                                height: '28px',
+                                                borderRadius: '14px',
+                                                background: settings.speakWelcome ? 'linear-gradient(135deg, #00ff88 0%, #00cc66 100%)' : 'rgba(122, 162, 196, 0.3)',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '2px',
+                                                left: settings.speakWelcome ? '24px' : '2px',
                                                 width: '24px',
                                                 height: '24px',
                                                 borderRadius: '50%',
@@ -1765,7 +1824,7 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                     </button>
 
                                     <textarea
-                                        className="input"
+                                        className="input jarvis-textarea"
                                         placeholder={isListening ? "Luisteren... 🎤" : "Ask me anything..."}
                                         style={{
                                             flex: 1,
@@ -1774,21 +1833,24 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                             background: 'rgba(20, 35, 50, 0.7)',
                                             border: '2px solid rgba(0, 212, 255, 0.3)',
                                             marginBottom: 0,
-                                            fontSize: '0.95rem',
+                                            fontSize: '1rem',
                                             color: '#f0f8ff',
-                                            transition: 'all 0.2s ease',
+                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                                             resize: 'none',
                                             minHeight: '48px',
                                             maxHeight: '150px',
                                             overflow: 'auto',
-                                            fontFamily: 'inherit'
+                                            fontFamily: 'inherit',
+                                            lineHeight: '1.5',
+                                            WebkitAppearance: 'none',
+                                            outline: 'none'
                                         }}
                                         rows={1}
                                         value={input}
                                         onChange={(e) => {
                                             setInput(e.target.value);
                                             // Auto-resize textarea
-                                            e.target.style.height = 'auto';
+                                            e.target.style.height = '48px';
                                             e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
                                         }}
                                         onKeyDown={(e) => {
@@ -1801,10 +1863,6 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                         onFocus={(e) => {
                                             e.target.style.borderColor = 'rgba(0, 212, 255, 0.6)';
                                             e.target.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.2)';
-                                            // Smooth scroll to input when keyboard opens (mobile fix)
-                                            setTimeout(() => {
-                                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                            }, 300);
                                         }}
                                         onBlur={(e) => {
                                             e.target.style.borderColor = 'rgba(0, 212, 255, 0.3)';

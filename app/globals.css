@@ -1129,3 +1129,43 @@ p {
     transform: translateY(0) scale(1);
   }
 }
+
+/* Mobile-friendly textarea styling */
+.jarvis-textarea {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.jarvis-textarea:focus {
+  outline: none !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Fix iOS zoom on input focus */
+@media screen and (max-width: 768px) {
+  .jarvis-textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+}
+
+/* Scrollbar styling for textarea */
+.jarvis-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.jarvis-textarea::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.jarvis-textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.4);
+  border-radius: 2px;
+}
+
+.jarvis-textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.6);
+}
