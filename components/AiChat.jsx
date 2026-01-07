@@ -416,15 +416,26 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             debugLog('🔊 [TTS] ✅ Using browser TTS!');
             setIsSpeaking(true);
 
-            // Cancel any ongoing speech
+            // CRITICAL iOS FIX: Check state and clear queue
             try {
-                speechSynthesis.cancel();
-                debugLog('🔊 [TTS] Cancelled previous speech');
+                debugLog('🔊 [TTS] speaking:', speechSynthesis.speaking, 'paused:', speechSynthesis.paused);
+
+                // Cancel any ongoing speech
+                if (speechSynthesis.speaking || speechSynthesis.pending) {
+                    speechSynthesis.cancel();
+                    debugLog('🔊 [TTS] Cancelled previous speech');
+                }
+
+                // Resume if paused (iOS bug fix)
+                if (speechSynthesis.paused) {
+                    speechSynthesis.resume();
+                    debugLog('🔊 [TTS] Resumed paused speechSynthesis');
+                }
             } catch (e) {
-                debugLog('🔊 [TTS] ⚠️ Cancel failed:', e.message);
+                debugLog('🔊 [TTS] ⚠️ State check failed:', e.message);
             }
 
-            // Simple utterance - no fancy settings
+            // Simple utterance
             const utterance = new SpeechSynthesisUtterance(cleanText);
             utterance.lang = 'nl-NL';
             utterance.rate = 1.0;
@@ -432,20 +443,32 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
             debugLog('🔊 [TTS] Created utterance, setting callbacks...');
 
+            // Timeout: if onstart doesn't fire in 500ms, force resume
+            let startTimeout = setTimeout(() => {
+                debugLog('🔊 [TTS] ⚠️ onstart NEVER fired! Trying resume...');
+                try {
+                    speechSynthesis.resume();
+                } catch (e) {
+                    debugLog('🔊 [TTS] ❌ Resume failed:', e.message);
+                }
+            }, 500);
+
             utterance.onstart = () => {
+                clearTimeout(startTimeout);
                 debugLog('🔊 [TTS] ✅✅ SPEECH STARTED!');
             };
 
             utterance.onend = () => {
-                debugLog('🔊 [TTS] ✅ Speech ended successfully');
+                clearTimeout(startTimeout);
+                debugLog('🔊 [TTS] ✅ Speech ended');
                 setIsSpeaking(false);
                 if (conversationMode) {
-                    debugLog('🔊 [TTS] Restarting listening in conversation mode...');
                     restartListeningInConversationMode();
                 }
             };
 
             utterance.onerror = (e) => {
+                clearTimeout(startTimeout);
                 debugLog('🔊 [TTS] ❌ ERROR:', e.error);
                 setIsSpeaking(false);
                 if (conversationMode) {
@@ -453,21 +476,28 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                 }
             };
 
-            // CRITICAL: Wrap in setTimeout to ensure it's after user gesture
-            setTimeout(() => {
-                try {
-                    debugLog('🔊 [TTS] Calling speechSynthesis.speak()...');
-                    speechSynthesis.speak(utterance);
-                    debugLog('🔊 [TTS] ✅ speak() called successfully!');
-                } catch (error) {
-                    debugLog('🔊 [TTS] ❌ Exception:', error.message);
-                    setIsSpeaking(false);
-                }
-            }, 10);
+            // Speak IMMEDIATELY (no setTimeout)
+            try {
+                debugLog('🔊 [TTS] Calling speak()...');
+                speechSynthesis.speak(utterance);
+                debugLog('🔊 [TTS] ✅ speak() called!');
 
-            return; // Done!
+                // iOS FIX: Force resume 100ms later
+                setTimeout(() => {
+                    if (!speechSynthesis.speaking) {
+                        debugLog('🔊 [TTS] 🔧 Still not speaking, forcing resume...');
+                        speechSynthesis.resume();
+                    }
+                }, 100);
+            } catch (error) {
+                clearTimeout(startTimeout);
+                debugLog('🔊 [TTS] ❌ Exception:', error.message);
+                setIsSpeaking(false);
+            }
+
+            return;
         } else {
-            debugLog('🔊 [TTS] ❌ SpeechSynthesis NOT available in this browser!');
+            debugLog('🔊 [TTS] ❌ SpeechSynthesis NOT available!');
         }
 
         // DESKTOP: Try OpenAI TTS (high quality)
