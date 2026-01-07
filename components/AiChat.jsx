@@ -812,13 +812,18 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             // Play message received sound
             soundsRef.current?.playMessageReceived();
 
-            // Speak response in conversation mode
-            if (data.text) {
-                await speakText(data.text);
+            // Speak response in conversation mode (use assistantMessage.text!)
+            if (assistantMessage && assistantMessage.text) {
+                await speakText(assistantMessage.text);
             }
         } catch (err) {
             console.error('Jarvis error:', err);
-            setMessages(prev => [...prev, { role: 'assistant', text: 'Oei, er ging iets mis. Probeer het nog eens!' }]);
+            const errorMessage = { role: 'assistant', text: 'Oei, er ging iets mis. Probeer het nog eens!' };
+            setMessages(prev => [...prev, errorMessage]);
+            // Also speak error in conversation mode
+            if (conversationMode) {
+                await speakText(errorMessage.text);
+            }
         } finally {
             setLoading(false);
         }
