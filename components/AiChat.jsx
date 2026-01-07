@@ -187,6 +187,19 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
                 setInput(transcript);
 
+                // Check for stop commands (Nederlands + Engels)
+                const lowerTranscript = transcript.toLowerCase().trim();
+                if (lowerTranscript.includes('stop conversatie') ||
+                    lowerTranscript.includes('stop conversation') ||
+                    lowerTranscript === 'stop' && conversationMode) {
+                    recognition.stop();
+                    setIsListening(false);
+                    setConversationMode(false);
+                    setInput('');
+                    soundsRef.current?.playNotification();
+                    return;
+                }
+
                 // Clear previous silence timer
                 if (silenceTimerRef.current) {
                     clearTimeout(silenceTimerRef.current);
@@ -350,30 +363,42 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
         }
     };
 
-    // Toggle conversation mode with auto-greeting
+    // Toggle conversation mode - microfoon direct AAN!
     const toggleConversationMode = async () => {
         const newMode = !conversationMode;
         setConversationMode(newMode);
 
         if (newMode) {
-            // Jarvis says cool greeting when entering conversation mode
-            const greetings = [
-                "Zeg het maar",
-                "I'm listening",
-                "Fire away",
-                "What's up?",
-                "Talk to me",
-                "Ready when you are",
-                "Go ahead",
-                "Shoot",
-                "Let's talk"
-            ];
-            const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+            // 🎤 DIRECT MICROFOON AAN - geen greeting meer!
+            if (!recognitionRef.current) {
+                alert('Voice input niet ondersteund in deze browser 🎤');
+                setConversationMode(false);
+                return;
+            }
 
-            // Speak the greeting
-            await speakText(greeting);
+            // Start listening immediately
+            try {
+                setInput('');
+                recognitionRef.current.start();
+                setIsListening(true);
+                soundsRef.current?.playVoiceStart();
 
-            // Auto-start listening after greeting (handled in speakText onended)
+                // Request Wake Lock to keep conversation going in background
+                if ('wakeLock' in navigator) {
+                    try {
+                        const wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('Wake Lock activated - conversation can continue in background');
+
+                        // Store wake lock reference for cleanup
+                        window.jarvisWakeLock = wakeLock;
+                    } catch (err) {
+                        console.warn('Wake Lock failed (ok op desktop):', err);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to start listening:', error);
+                setConversationMode(false);
+            }
         } else {
             // Stop any ongoing audio/recognition
             if (audioRef.current) {
@@ -385,6 +410,13 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             }
             setIsSpeaking(false);
             setIsListening(false);
+
+            // Release Wake Lock
+            if (window.jarvisWakeLock) {
+                window.jarvisWakeLock.release();
+                window.jarvisWakeLock = null;
+                console.log('Wake Lock released');
+            }
         }
     };
 
