@@ -420,8 +420,10 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     };
 
     // Text-to-Speech function for conversation mode
-    const speakText = async (text) => {
-        debugLog('🔊 [TTS] Called with text:', text?.substring(0, 50));
+    // manualClick = true when triggered by replay button click (iOS primer works!)
+    // manualClick = false when triggered by autoSpeak (iOS blocks, use OpenAI TTS)
+    const speakText = async (text, manualClick = false) => {
+        debugLog('🔊 [TTS] Called with text:', text?.substring(0, 50), 'manualClick:', manualClick);
 
         if (!text) {
             debugLog('🔊 [TTS] No text, returning');
@@ -443,11 +445,13 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
 
         debugLog('🔊 [TTS] Cleaned text:', cleanText.substring(0, 50));
 
-        // ALWAYS USE BROWSER TTS - simpel en betrouwbaar!
-        debugLog('🔊 [TTS] SpeechSynthesis available:', 'speechSynthesis' in window);
+        // iOS FIX: Use browser TTS ONLY for manual clicks (replay button)
+        // Use OpenAI TTS for autoSpeak (audio elements CAN autoplay after user interaction)
+        const useBrowserTTS = manualClick && 'speechSynthesis' in window;
+        debugLog('🔊 [TTS] useBrowserTTS:', useBrowserTTS, 'SpeechSynthesis available:', 'speechSynthesis' in window);
 
-        if ('speechSynthesis' in window) {
-            debugLog('🔊 [TTS] ✅ Using browser TTS!');
+        if (useBrowserTTS) {
+            debugLog('🔊 [TTS] ✅ Using browser TTS (manual click)!');
             setIsSpeaking(true);
 
             // AGGRESSIVE iOS FIX: Full reset sequence
@@ -544,13 +548,13 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             }
 
             return;
-        } else {
-            debugLog('🔊 [TTS] ❌ SpeechSynthesis NOT available!');
         }
 
-        // DESKTOP: Try OpenAI TTS (high quality)
+        // FALLBACK: OpenAI TTS (for autoSpeak or when browser TTS unavailable)
+        // Audio elements CAN autoplay on iOS after user interaction!
+        debugLog('🔊 [TTS] Using OpenAI TTS fallback');
         try {
-            console.log('[TTS] Starting OpenAI TTS (desktop)...');
+            console.log('[TTS] Starting OpenAI TTS...');
             setIsSpeaking(true);
 
             const response = await fetch('/api/jarvis/text-to-speech', {
@@ -2237,7 +2241,8 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                                 onClick={() => {
                                                     // iOS FIX: Prime speechSynthesis IMMEDIATELY in click!
                                                     primeIOSSpeechSynthesis();
-                                                    speakText(msg.text);
+                                                    // manualClick=true to use browser TTS instead of OpenAI TTS
+                                                    speakText(msg.text, true);
                                                 }}
                                                 disabled={isSpeaking}
                                                 title="Speel dit bericht af"
