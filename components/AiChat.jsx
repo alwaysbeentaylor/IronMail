@@ -86,6 +86,23 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             }
         }
 
+        // Initialize browser TTS voices (important for Chrome mobile!)
+        if ('speechSynthesis' in window) {
+            // Load voices - Chrome requires this event
+            const loadVoices = () => {
+                const voices = speechSynthesis.getVoices();
+                console.log('[Browser TTS] Loaded', voices.length, 'voices');
+            };
+
+            // Try to load immediately
+            loadVoices();
+
+            // Also listen for voiceschanged event (Chrome)
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
         // Auto-request audio/notification permissions on mount (only once)
         const hasRequestedPermissions = localStorage.getItem('jarvis_permissions_requested');
         if (!hasRequestedPermissions) {
@@ -470,16 +487,59 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                 console.error('[TTS] Play failed:', playError);
                 // Common on mobile: NotAllowedError, NotSupportedError
                 if (playError.name === 'NotAllowedError') {
-                    console.warn('[TTS] Autoplay blocked by browser - need user interaction');
-                    alert('🔊 Audio geblokkeerd!\n\nJe browser blokkeert autoplay. Klik OK om audio te starten.');
-                    // Try again after user clicked OK
-                    try {
-                        await audio.play();
-                        console.log('[TTS] Audio playing after user interaction!');
-                    } catch (retryError) {
-                        console.error('[TTS] Retry failed:', retryError);
-                        throw retryError;
+                    console.warn('[TTS] Autoplay blocked - falling back to browser TTS');
+                    setIsSpeaking(false);
+                    URL.revokeObjectURL(audioUrl);
+
+                    // FALLBACK: Use browser's native TTS (works ALTIJD op mobile!)
+                    if ('speechSynthesis' in window) {
+                        setIsSpeaking(true);
+
+                        // Cancel any ongoing speech first
+                        speechSynthesis.cancel();
+
+                        const utterance = new SpeechSynthesisUtterance(cleanText);
+
+                        // Try to find Dutch voice (with retry for Chrome)
+                        let voices = speechSynthesis.getVoices();
+                        if (voices.length === 0) {
+                            // Chrome bug: voices might not be loaded yet
+                            console.warn('[Browser TTS] No voices loaded yet, using default');
+                        } else {
+                            const dutchVoice = voices.find(v => v.lang.startsWith('nl')) ||
+                                             voices.find(v => v.lang.startsWith('en-GB')) ||
+                                             voices.find(v => v.lang.startsWith('en'));
+                            if (dutchVoice) {
+                                utterance.voice = dutchVoice;
+                                console.log('[Browser TTS] Using voice:', dutchVoice.name);
+                            }
+                        }
+
+                        utterance.rate = settings.ttsSpeed || 1.0;
+                        utterance.pitch = 1.0;
+                        utterance.volume = 1.0;
+                        utterance.lang = 'nl-NL'; // Set language even without voice
+
+                        utterance.onend = () => {
+                            console.log('[Browser TTS] Speech ended');
+                            setIsSpeaking(false);
+                            restartListeningInConversationMode();
+                        };
+
+                        utterance.onerror = (e) => {
+                            console.error('[Browser TTS] Error:', e);
+                            setIsSpeaking(false);
+                            restartListeningInConversationMode();
+                        };
+
+                        speechSynthesis.speak(utterance);
+                        console.log('[Browser TTS] Using native browser TTS - geen autoplay restrictions! 🔊');
+                    } else {
+                        // No TTS available at all
+                        console.error('[Browser TTS] Not supported in this browser');
+                        restartListeningInConversationMode();
                     }
+                    return; // Don't throw, we handled it
                 } else {
                     throw playError;
                 }
