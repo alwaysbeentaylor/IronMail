@@ -357,32 +357,42 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
     // Helper: restart listening in conversation mode (with retry logic)
     const restartListeningInConversationMode = () => {
         if (conversationMode && recognitionRef.current && !isListening) {
+            debugLog('🎤 [RESTART] Attempting to restart listening in 500ms...');
             setTimeout(() => {
                 try {
+                    debugLog('🎤 [RESTART] Starting recognition...');
                     setInput('');
                     recognitionRef.current.start();
                     setIsListening(true);
                     soundsRef.current?.playVoiceStart();
+                    debugLog('🎤 [RESTART] ✅ Recognition restarted successfully!');
                 } catch (error) {
+                    debugLog('🎤 [RESTART] ❌ Failed:', error.message);
                     console.error('Failed to restart listening:', error);
 
-                    // RETRY once after 1 second if it fails
+                    // RETRY once after 2 seconds (longer wait for iOS)
+                    debugLog('🎤 [RESTART] Retrying in 2 seconds...');
                     setTimeout(() => {
                         if (conversationMode && !isListening) {
                             try {
+                                debugLog('🎤 [RESTART] RETRY: Starting recognition...');
                                 recognitionRef.current.start();
                                 setIsListening(true);
                                 soundsRef.current?.playVoiceStart();
+                                debugLog('🎤 [RESTART] ✅ RETRY SUCCESS!');
                             } catch (retryError) {
+                                debugLog('🎤 [RESTART] ❌ RETRY FAILED:', retryError.message);
                                 console.error('Retry failed:', retryError);
                                 // Give up and turn off conversation mode
                                 setConversationMode(false);
                                 alert('Conversation mode gestopt: microfoon kon niet herstarten 🎤');
                             }
                         }
-                    }, 1000);
+                    }, 2000);
                 }
             }, 500);
+        } else {
+            debugLog('🎤 [RESTART] Skipped - conversationMode:', conversationMode, 'hasRecognition:', !!recognitionRef.current, 'isListening:', isListening);
         }
     };
 
