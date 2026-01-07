@@ -385,7 +385,23 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                 })
             });
 
-            if (!response.ok) throw new Error('TTS failed');
+            if (!response.ok) {
+                // Check if it's a quota error
+                const errorData = await response.json().catch(() => ({}));
+                if (errorData.isQuotaError || response.status === 402) {
+                    console.warn('⚠️ OpenAI TTS credits zijn op!');
+                    // Show alert only once per session
+                    if (!window.jarvisQuotaWarningShown) {
+                        alert('⚠️ OpenAI credits zijn bijna op!\n\nJarvis kan niet meer spreken, maar conversation mode gaat door in TEXT-ONLY mode.\n\nVul je credits aan op platform.openai.com');
+                        window.jarvisQuotaWarningShown = true;
+                    }
+                    setIsSpeaking(false);
+                    // Continue conversation mode without speech
+                    restartListeningInConversationMode();
+                    return;
+                }
+                throw new Error('TTS failed');
+            }
 
             const audioBlob = await response.blob();
             const audioUrl = URL.createObjectURL(audioBlob);

@@ -26,9 +26,20 @@ export async function POST(req) {
 
     } catch (error) {
         console.error('TTS error:', error);
+
+        // Check for quota/billing errors
+        const isQuotaError = error.message?.includes('429') ||
+                            error.message?.includes('quota') ||
+                            error.message?.includes('insufficient_quota') ||
+                            error.status === 429;
+
         return NextResponse.json({
             success: false,
-            error: error.message || 'TTS failed'
-        }, { status: 500 });
+            error: error.message || 'TTS failed',
+            isQuotaError: isQuotaError,
+            message: isQuotaError
+                ? '⚠️ OpenAI credits zijn op! Vul je account aan op platform.openai.com'
+                : 'TTS tijdelijk niet beschikbaar'
+        }, { status: isQuotaError ? 402 : 500 });
     }
 }
