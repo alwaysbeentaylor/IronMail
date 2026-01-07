@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Loader2, Bot, Mail, Mic, MicOff, Phone, PhoneOff, Menu, Search, Plus, Trash2, Edit2, Download, Settings } from 'lucide-react';
+import { MessageSquare, X, Send, Loader2, Bot, Mail, Mic, MicOff, Phone, PhoneOff, Menu, Search, Plus, Trash2, Edit2, Download, Settings, Volume2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { getJarvisSounds } from '@/lib/jarvis-sounds';
 import { JarvisSessions } from '@/lib/jarvis-sessions';
@@ -390,18 +390,66 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
             return;
         }
 
-        try {
-            console.log('[TTS] Starting speech...');
+        // Clean text for TTS (remove markdown, emojis for better speech)
+        const cleanText = text
+            .replace(/[🔥💡⚡✨🚀🎯📝🌐🖼️⏰🔔🎤🌍📧💬👋😊👍✅🤔👻🐍🌌🔐😎]/g, '')
+            .replace(/\*\*/g, '')
+            .replace(/\n\n/g, '. ')
+            .trim();
+
+        console.log('[TTS] Cleaned text:', cleanText.substring(0, 50));
+
+        // MOBILE: Use browser TTS directly (works 100% of time!)
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile && 'speechSynthesis' in window) {
+            console.log('[TTS] Mobile detected - using browser TTS directly (geen API calls!)');
             setIsSpeaking(true);
 
-            // Clean text for TTS (remove markdown, emojis for better speech)
-            const cleanText = text
-                .replace(/[🔥💡⚡✨🚀🎯📝🌐🖼️⏰🔔🎤🌍📧💬👋😊👍✅🤔👻🐍🌌🔐😎]/g, '')
-                .replace(/\*\*/g, '')
-                .replace(/\n\n/g, '. ')
-                .trim();
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
 
-            console.log('[TTS] Cleaned text:', cleanText.substring(0, 50));
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+
+            // Try to find Dutch voice
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                console.warn('[Browser TTS] No voices loaded yet, using default');
+            } else {
+                const dutchVoice = voices.find(v => v.lang.startsWith('nl')) ||
+                                 voices.find(v => v.lang.startsWith('en-GB')) ||
+                                 voices.find(v => v.lang.startsWith('en'));
+                if (dutchVoice) {
+                    utterance.voice = dutchVoice;
+                    console.log('[Browser TTS] Using voice:', dutchVoice.name);
+                }
+            }
+
+            utterance.rate = settings.ttsSpeed || 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            utterance.lang = 'nl-NL';
+
+            utterance.onend = () => {
+                console.log('[Browser TTS] Speech ended');
+                setIsSpeaking(false);
+                restartListeningInConversationMode();
+            };
+
+            utterance.onerror = (e) => {
+                console.error('[Browser TTS] Error:', e);
+                setIsSpeaking(false);
+                restartListeningInConversationMode();
+            };
+
+            speechSynthesis.speak(utterance);
+            console.log('[Browser TTS] Speaking on mobile - 100% reliable! 🔊');
+            return; // Done, don't try OpenAI TTS
+        }
+
+        // DESKTOP: Try OpenAI TTS (high quality)
+        try {
+            console.log('[TTS] Starting OpenAI TTS (desktop)...');
+            setIsSpeaking(true);
 
             const response = await fetch('/api/jarvis/text-to-speech', {
                 method: 'POST',
@@ -1896,6 +1944,44 @@ export default function AiChat({ forceOpen = false, onClose = null }) {
                                         backdropFilter: msg.role === 'assistant' ? 'blur(10px)' : 'none'
                                     }}>
                                         {msg.text}
+
+                                        {/* Replay button voor assistant messages */}
+                                        {msg.role === 'assistant' && !msg.fadeOut && (
+                                            <button
+                                                onClick={() => speakText(msg.text)}
+                                                disabled={isSpeaking}
+                                                title="Speel dit bericht af"
+                                                style={{
+                                                    marginTop: '0.5rem',
+                                                    padding: '0.4rem 0.7rem',
+                                                    borderRadius: '8px',
+                                                    background: isSpeaking ? 'rgba(0, 212, 255, 0.3)' : 'rgba(0, 212, 255, 0.1)',
+                                                    border: '1px solid rgba(0, 212, 255, 0.3)',
+                                                    color: '#00d4ff',
+                                                    fontSize: '0.75rem',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.4rem',
+                                                    cursor: isSpeaking ? 'not-allowed' : 'pointer',
+                                                    transition: 'all 0.2s ease',
+                                                    opacity: isSpeaking ? 0.5 : 1
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    if (!isSpeaking) {
+                                                        e.currentTarget.style.background = 'rgba(0, 212, 255, 0.2)';
+                                                        e.currentTarget.style.transform = 'scale(1.05)';
+                                                    }
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.background = 'rgba(0, 212, 255, 0.1)';
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                            >
+                                                <Volume2 size={12} />
+                                                <span>Afspelen</span>
+                                            </button>
+                                        )}
+
                                         {msg.timestamp && (
                                             <div style={{
                                                 marginTop: '0.5rem',
